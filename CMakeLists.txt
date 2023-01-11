@@ -45,7 +45,7 @@ endif(UNIX)
 include_directories(inc)
 
 # Set Cmake Wildcard
-file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY sprites DESTINATION ${CMAKE_BINARY_DIR})
 file(GLOB ALL_SRCS
   # "src/*. "
   "src/Components/*.cpp"
