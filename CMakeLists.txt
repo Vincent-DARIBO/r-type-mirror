@@ -12,7 +12,9 @@ find_package(Threads REQUIRED)
 if(UNIX)
   find_package(ALSA)
   find_package(MESA)
-  find_package(X11)
+  if (NOT X11_FOUND)
+  find_library(X11_X11_LIB X11               ${X11_LIB_SEARCH_PATH})
+  endif()
 endif(UNIX)
 
 # Install raylib
@@ -45,10 +47,10 @@ include_directories(inc)
 # Set Cmake Wildcard
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 file(GLOB ALL_SRCS
-  "src/*.cpp"
-  "src/components/*.cpp"
-  "src/screens/*.cpp"
-  "src/Raylib/*.cpp"
+  # "src/*. "
+  "src/Components/*.cpp"
+  # "src/screens/*.cpp"
+  # "src/Raylib/*.cpp"
 )
 
 # Set Sources Files & Link Libraries
