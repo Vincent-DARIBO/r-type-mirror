@@ -1,0 +1,21 @@
+#ifndef _HEALTH_
+#define _HEALTH_
+
+#include "./IComponent.hpp"
+
+namespace Components
+{
+    class Health : public IComponent
+    {
+    private:
+        int _hp;
+
+    public:
+        Health(/* args */);
+        ~Health();
+        int getHp();
+        void setHp(int hp);
+    };
+}
+
+#endif
