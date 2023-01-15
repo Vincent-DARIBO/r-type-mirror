@@ -45,7 +45,7 @@ void Core::closeWindow()
     CloseWindow();
 }
 
-void unloadTexture(Texture2D texture)
+void Core::unloadTexture(Texture2D texture)
 {
     UnloadTexture(texture);
 }
