@@ -21,6 +21,7 @@ The Gitflow method can be defined in a few steps:
 > :warning: This branch will be modified only for bug fixes, no more features will be added :warning:
 
 4. Finally when the release is ready, the branch can be merged with develop and main
+
 [More information on this page](https://www.atlassian.com/fr/git/tutorials/comparing-workflows/gitflow-workflow)
 
 ### Commit structure
