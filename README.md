@@ -7,6 +7,7 @@
 - [Project structure](#project-structure)
 - [Gitflow](#gitflow)
 - [Commit structure](#commit-structure)
+- [ECS architecture](#ecs-architecture)
 
 ### Installation
 - [Clone the repository](https://github.com/EpitechPromo2025/B-CPP-500-LYN-5-2-rtype-tania.bezancon)
@@ -48,3 +49,6 @@ The commit type can include the following:
 - `ci` – continuous integration related
 - `build` – changes that affect the build system or external dependencies
 - `revert` – reverts a previous commit
+
+### ECS architecture
+*To complete*
