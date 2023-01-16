@@ -3,12 +3,19 @@
 
 ## Here you will find all you need to know about:
 
+- [Installation](#installation)
 - [Project structure](#project-structure)
 - [Gitflow](#gitflow)
 - [Commit structure](#commit-structure)
 
-
-
+### Installation
+- [Clone the repository](https://github.com/EpitechPromo2025/B-CPP-500-LYN-5-2-rtype-tania.bezancon)
+- On **Windows**
+    - Install Visual studio 2021
+    - Open the project and launch it
+ - On **linux** run the following commands -> ``if [ ! -d "build" ]; then mkdir build; fi
+rm -rf bomberman
+cd build && cmake install .. && cmake --build . && cd .. && cp build/bomberman .``
 ### Project structure
 *To complete*
 
