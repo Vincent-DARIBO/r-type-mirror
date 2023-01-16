@@ -24,12 +24,8 @@ std::shared_ptr<Components::Position> Entity::getPositionComp()
 {
     for (auto i : _components)
     {
-        std::cout << "333" << std::endl;
-        if (i->getComponentType() == POSITION) {
-            std::cout << "111" << std::endl;
+        if (i->getComponentType() == POSITION)
             return std::reinterpret_pointer_cast<Components::Position>(i);
-            std::cout << "222" << std::endl;
-        }
     }
     throw "Object comp not in entity";
 }
