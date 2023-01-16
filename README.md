@@ -3,9 +3,9 @@
 
 ## Here you will find all you need to know about:
 
-- [Project structure] (/content/Project structure)
-- [Gitflow](/content/Gitflow)
-- [Commit structure] (/content/Commit structure)
+- [Project structure](#project-structure)
+- [Gitflow](#gitflow)
+- [Commit structure](#commit-structure)
 
 
 
