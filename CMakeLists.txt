@@ -8,13 +8,22 @@ cmake_minimum_required(VERSION 3.17)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-# Install alsa
 if(UNIX)
+  INCLUDE(FetchContent)
+
   find_package(ALSA)
-  find_package(MESA)
-  if (NOT X11_FOUND)
-  find_library(X11_X11_LIB X11               ${X11_LIB_SEARCH_PATH})
-  endif()
+  find_package(OpenGL REQUIRED)
+  # find_package(X11 REQUIRED)
+  # install(X11)
+  # if (NOT OPENGL_XMESA_FOUND)
+  #   find_package(MESA)
+  # endif()
+  # find_package(X11 REQUIRED)
+  # if (NOT X11_FOUND)
+  #   message("#####INSTALLING X11#####S")
+  #   install(TARGETS X11)
+  #   find_library(X11_X11_LIB X11 ${X11_LIB_SEARCH_PATH})
+  # endif()
 endif(UNIX)
 
 # Install raylib
@@ -47,8 +56,9 @@ include_directories(inc)
 # Set Cmake Wildcard
 file(COPY sprites DESTINATION ${CMAKE_BINARY_DIR})
 file(GLOB ALL_SRCS
+ "main.cpp"
   # "src/*. "
-  "src/Components/*.cpp"
+  # "src/Components/*.cpp"
   # "src/screens/*.cpp"
   # "src/Raylib/*.cpp"
 )
