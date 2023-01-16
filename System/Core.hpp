@@ -4,6 +4,8 @@
 #include <string>
 #include <raylib.h>
 #include "./Draw.hpp"
+#include <vector>
+#include <memory>
 
 class Core
 {
@@ -18,6 +20,7 @@ public:
     ~Core();
     Core(int screenWidth, int screenHeight, std::string name, int fps);
     void setFps(int fps);
+    int getFps();
     int getScreenWidth();
     int getScreenHeight();
     bool windowShouldClose();

@@ -4,7 +4,8 @@
 
 void Entity::addComponents(std::vector<std::shared_ptr<Components::IComponent>> components)
 {
-    for (auto i: components) {
+    for (auto i : components)
+    {
         _components.push_back(i);
     }
 }
@@ -21,12 +22,47 @@ std::shared_ptr<Components::Object> Entity::getObjectComp()
 
 std::shared_ptr<Components::Position> Entity::getPositionComp()
 {
-    // std::cout << "getPositionComp" << std::endl;
     for (auto i : _components)
     {
-        // std::cout << i->getComponentType() << std::endl; 
-        if (i->getComponentType() == POSITION)
+        std::cout << "333" << std::endl;
+        if (i->getComponentType() == POSITION) {
+            std::cout << "111" << std::endl;
             return std::reinterpret_pointer_cast<Components::Position>(i);
+            std::cout << "222" << std::endl;
+        }
     }
     throw "Object comp not in entity";
+}
+
+std::shared_ptr<Components::Movements> Entity::getMovementsComp()
+{
+    for (auto i : _components)
+    {
+        if (i->getComponentType() == MOVEMENTS)
+            return std::reinterpret_pointer_cast<Components::Movements>(i);
+    }
+    throw "Object comp not in entity";
+}
+
+std::shared_ptr<Components::Animation> Entity::getAnimationComp()
+{
+    for (auto i : _components)
+    {
+        if (i->getComponentType() == ANIMATION)
+            return std::reinterpret_pointer_cast<Components::Animation>(i);
+    }
+    throw "Object comp not in entity";
+}
+
+Entity Entity::operator=(Entity &entity)
+{
+    _components = entity._components;
+    return *this;
+}
+
+void Entity::addComponent(std::shared_ptr<Components::Position> comp)
+{
+    std::cout << "okk" << std::endl;
+    _components.push_back(comp);
+    std::cout << "-----" << std::endl;
 }

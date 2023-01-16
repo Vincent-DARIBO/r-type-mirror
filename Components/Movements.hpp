@@ -1,4 +1,8 @@
+#ifndef _MOVEMENTS_
+#define _MOVEMENTS_
+
 #include "./IComponent.hpp"
+#include "./Position.hpp"
 
 namespace Components
 {
@@ -6,11 +10,17 @@ namespace Components
     {
     private:
         int _speed;
-
+        int _keyUp;
+        int _keyDown;
+        int _keyRight;
+        int _keyLeft;
     public:
         Movements(/* args */);
         ~Movements();
+        void move(Position &pos, Direction direction);
         void setSpeed(int speed);
         int getSpeed();
     };
 }
+
+#endif

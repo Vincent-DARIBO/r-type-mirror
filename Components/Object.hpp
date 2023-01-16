@@ -17,6 +17,7 @@ namespace Components
         void setRect(Rectangle rect);
         Rectangle getRect();
         Texture2D getTexture();
+        // void animate();
     };
 }
 

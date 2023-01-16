@@ -9,7 +9,7 @@ namespace Components
     {
     private:
         Vector2 _pos;
-
+        int _id;
     public:
         Position(/* args */);
         ~Position();

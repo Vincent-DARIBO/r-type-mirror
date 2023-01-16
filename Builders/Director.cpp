@@ -24,11 +24,19 @@ Entity &Director::make(EntityTypes type)
     case EntityTypes::PLAYER:
         _playerBuilder.setObject();
         _playerBuilder.setPosition();
+        _playerBuilder.setAnimation();
         // _playerBuilder.setTexture();
-        // _playerBuilder.setMovement();
+        _playerBuilder.setMovement();
         // _playerBuilder.setCollision();
         _playerBuilder.addComps();
         return _playerBuilder.getEntity();
+    case EntityTypes::PROJECTILES:
+        _projectileBuilder.setObject();
+        _projectileBuilder.setPosition();
+        // _projectileBuilder.setMovement();
+        // _playerBuilder.setAnimation();
+        _projectileBuilder.addComps();
+        return _projectileBuilder.getEntity();
     default:
         throw "Invalid EntityTypes";
     }

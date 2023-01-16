@@ -6,16 +6,24 @@
 
 enum ComponentTypes
 {
-    CAMERA,
+    // CAMERA,
     HEALTH,
     POSITION,
     MOVEMENTS,
     OBJECT,
     TEXT,
-    COLLISION,
-    PROJECTILES,
-    IA,
-    RENDER,
+    // COLLISION,
+    // IA,
+    // RENDER,
+    ANIMATION,
+};
+
+enum Direction
+{
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT
 };
 
 typedef struct vector2int
