@@ -1,18 +1,19 @@
 #include "./Components/IComponent.hpp"
 #include "./System/Core.hpp"
-// #include "./System/Draw.hpp"
 #include "./Entity/Entity.hpp"
-// #include "./Builders/Director.hpp"
 #include <iostream>
 #include "./Factory/PlayerFactory.hpp"
 #include "./Factory/ProjectilesFactory.hpp"
+#include <memory>
 
 int main()
 {
     Core core(1700, 800, "r-type", 60);
 
-    Factory *playerFactory = new PlayerFactory();
-    Factory *projectileFactory = new ProjectilesFactory();
+    std::unique_ptr<Factory> playerFactory = std::make_unique<PlayerFactory>();
+    std::unique_ptr<Factory> projectileFactory = std::make_unique<ProjectilesFactory>();
+    // Factory *playerFactory = new PlayerFactory();
+    // Factory *projectileFactory = new ProjectilesFactory();
 
     Player *player = reinterpret_cast<Player *>(playerFactory->create());
 
@@ -33,28 +34,15 @@ int main()
     int boxPositionY = core.getScreenHeight() / 2 - 40;
     int scrollSpeed = 4;
 
+    player->setKeys({KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT});
+
     while (!core.windowShouldClose())
     {
 
         player->getAnimationComp()->animate(core.getFps(), player->getObjectComp());
 
-        if (IsKeyDown(KEY_UP))
-            player->getMovementsComp()->move(player->getPositionComp(), UP);
-        if (IsKeyDown(KEY_RIGHT))
-            player->getMovementsComp()->move(player->getPositionComp(), RIGHT);
-        if (IsKeyDown(KEY_DOWN))
-            player->getMovementsComp()->move(player->getPositionComp(), DOWN);
-        if (IsKeyDown(KEY_LEFT))
-            player->getMovementsComp()->move(player->getPositionComp(), LEFT);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-        {
-            projectiles.push_back(reinterpret_cast<Projectiles *>(projectileFactory->create()));
-            Components::Position posCompProj({player->getPositionComp()->getPosition().x, player->getPositionComp()->getPosition().y});
-            Components::Object objCompProj("../sprites/r-typesheet1.gif");
-            projectiles.at(projectiles.size() - 1)->addComp(std::make_shared<Components::Position>(posCompProj));
-            projectiles.at(projectiles.size() - 1)->addComp(std::make_shared<Components::Object>(objCompProj));
-            projectiles.at(projectiles.size() - 1)->getObjectComp()->setRect({232.0f, 103.0f, 16, 12});
-        }
+        core.getInput().handler(player, &projectiles, projectileFactory);
+
 
         boxPositionY -= (GetMouseWheelMove() * scrollSpeed);
         core.getDraw().beginDrawing();

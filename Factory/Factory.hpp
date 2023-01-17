@@ -13,12 +13,4 @@ public:
     virtual Entity* create() const = 0;
 };
 
-Factory::Factory(/* args */)
-{
-}
-
-Factory::~Factory()
-{
-}
-
 #endif

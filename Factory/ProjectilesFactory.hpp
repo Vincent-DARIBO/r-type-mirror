@@ -14,17 +14,4 @@ public:
     Entity *create() const override;
 };
 
-ProjectilesFactory::ProjectilesFactory(/* args */)
-{
-}
-
-ProjectilesFactory::~ProjectilesFactory()
-{
-}
-
-Entity *ProjectilesFactory::create() const
-{
-    return new Projectiles();
-}
-
 #endif

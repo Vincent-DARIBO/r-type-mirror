@@ -42,6 +42,11 @@ Draw Core::getDraw()
     return _draw;
 }
 
+Input Core::getInput()
+{
+    return _input;
+}
+
 bool Core::windowShouldClose()
 {
     return WindowShouldClose();
@@ -57,14 +62,16 @@ void Core::unloadTexture(Texture2D texture)
     UnloadTexture(texture);
 }
 
-// std::vector<Components::Projectiles> Core::getProjectiles()
-// {
-//     return _projectiles;
-// }
+void Core::setInputs(int keyUp, int keyRight, int keyDown, int keyLeft)
+{
+    _keyUp = keyUp;
+    std::cout << "_keyUp" << _keyUp << std::endl;
+    _keyRight = keyRight;
+    _keyDown = keyDown;
+    _keyLeft = keyLeft;
+}
 
-// void Core::addProjectiles(vector2int pos)
-// {
-//     Components::Projectiles projectile;
-
-//     _projectiles.push_back(projectile);
-// }
+Vector4 Core::getInputs()
+{
+    return {_keyUp, _keyRight, _keyDown, _keyLeft};
+}

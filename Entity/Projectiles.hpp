@@ -12,12 +12,4 @@ public:
     ~Projectiles();
 };
 
-Projectiles::Projectiles(/* args */)
-{
-}
-
-Projectiles::~Projectiles()
-{
-}
-
 #endif

@@ -4,6 +4,8 @@
 #include <string>
 #include <raylib.h>
 #include "./Draw.hpp"
+#include "./Input.hpp"
+#include "../Entity/Player.hpp"
 #include <vector>
 #include <memory>
 
@@ -15,6 +17,13 @@ private:
     int _fps;
     std::string _name;
     Draw _draw;
+    Input _input;
+    int _keyUp;
+    int _keyRight;
+    int _keyDown;
+    int _keyLeft;
+protected:
+    Player _player;
 public:
     Core(/* args */);
     ~Core();
@@ -26,7 +35,10 @@ public:
     bool windowShouldClose();
     void closeWindow();
     Draw getDraw();
+    Input getInput();
     void unloadTexture(Texture2D texture);
+    void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
+    Vector4 getInputs();
 };
 
 #endif

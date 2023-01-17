@@ -14,17 +14,4 @@ public:
     Entity *create() const override;
 };
 
-PlayerFactory::PlayerFactory(/* args */)
-{
-}
-
-PlayerFactory::~PlayerFactory()
-{
-}
-
-Entity *PlayerFactory::create() const 
-{
-    return new Player();
-}
-
 #endif
