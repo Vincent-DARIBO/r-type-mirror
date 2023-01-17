@@ -12,6 +12,7 @@ namespace Components
         int _id;
     public:
         Position(/* args */);
+        Position(Vector2 pos);
         ~Position();
         void setPosition(Vector2 pos);
         Vector2 getPosition();

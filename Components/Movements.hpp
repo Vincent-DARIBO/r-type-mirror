@@ -3,6 +3,7 @@
 
 #include "./IComponent.hpp"
 #include "./Position.hpp"
+#include <memory>
 
 namespace Components
 {
@@ -16,8 +17,9 @@ namespace Components
         int _keyLeft;
     public:
         Movements(/* args */);
+        Movements(int speed);
         ~Movements();
-        void move(Position &pos, Direction direction);
+        void move(std::shared_ptr<Position> pos, Direction direction);
         void setSpeed(int speed);
         int getSpeed();
     };

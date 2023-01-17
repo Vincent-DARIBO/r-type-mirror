@@ -5,27 +5,33 @@ Components::Movements::Movements(/* args */)
     _componentType = ComponentTypes::MOVEMENTS;
 }
 
+Components::Movements::Movements(int speed)
+{
+    _componentType = ComponentTypes::MOVEMENTS;
+    _speed = speed;
+}
+
 Components::Movements::~Movements()
 {
 }
 
-void Components::Movements::move(Position &pos, Direction direction)
+void Components::Movements::move(std::shared_ptr<Position> pos, Direction direction)
 {
-    float x = pos.getPosition().x;
-    float y = pos.getPosition().y;
+    float x = pos->getPosition().x;
+    float y = pos->getPosition().y;
     switch (direction)
     {
     case UP:
-        pos.setPosition({x, y - _speed});
+        pos->setPosition({x, y - _speed});
         break;
     case RIGHT:
-        pos.setPosition({x + _speed, y});
+        pos->setPosition({x + _speed, y});
         break;
     case DOWN:
-        pos.setPosition({x, y + _speed});
+        pos->setPosition({x, y + _speed});
         break;
     case LEFT:
-        pos.setPosition({x - _speed, y});
+        pos->setPosition({x - _speed, y});
         break;
 
     default:

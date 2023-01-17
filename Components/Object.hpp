@@ -12,6 +12,8 @@ namespace Components
         Rectangle _rect;
     public:
         Object(/* args */);
+        Object(std::string path);
+        Object(std::string path, Rectangle rect);
         ~Object();
         void setTexture(std::string path);
         void setRect(Rectangle rect);

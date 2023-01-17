@@ -5,6 +5,19 @@ Components::Object::Object(/* args */)
     _componentType = ComponentTypes::OBJECT;
 }
 
+Components::Object::Object(std::string path)
+{
+    _componentType = ComponentTypes::OBJECT;
+    _texture = LoadTexture(path.c_str());
+}
+
+Components::Object::Object(std::string path, Rectangle rect)
+{
+    _componentType = ComponentTypes::OBJECT;
+    _texture = LoadTexture(path.c_str());
+    _rect = rect;
+}
+
 Components::Object::~Object()
 {
 }

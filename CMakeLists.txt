@@ -46,7 +46,8 @@ include_directories(inc)
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 file(GLOB ALL_SRCS
   "./*.cpp"
-  "Builders/*.cpp"
+  # "Builders/*.cpp"
+  "Factory/*.cpp"
   "Components/*.cpp"
   "Entity/*.cpp"
   "System/*.cpp"

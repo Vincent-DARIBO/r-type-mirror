@@ -5,6 +5,15 @@ Components::Animation::Animation(/* args */)
     _componentType = ComponentTypes::ANIMATION;
 }
 
+Components::Animation::Animation(int currentFrame, int framesCounter, int framesSpeed, int limitFrame)
+{
+    _componentType = ComponentTypes::ANIMATION;
+    _currentFrame = currentFrame;
+    _framesCounter = framesCounter;
+    _framesSpeed = framesSpeed;
+    _limitFrame = limitFrame;
+}
+
 Components::Animation::~Animation()
 {
 }
@@ -17,7 +26,7 @@ void Components::Animation::setFrames(int currentFrame, int framesCounter, int f
     _limitFrame = limitFrame;
 }
 
-void Components::Animation::animate(int fps, Object &object)
+void Components::Animation::animate(int fps, std::shared_ptr<Object> object)
 {
     _framesCounter++;
 
@@ -29,6 +38,6 @@ void Components::Animation::animate(int fps, Object &object)
         if (_currentFrame >= _limitFrame)
             _currentFrame = 0;
 
-        object.setRect({(float)_currentFrame * (float)object.getTexture().width / 8, object.getRect().y, object.getRect().width, object.getRect().height});
+        object->setRect({(float)_currentFrame * (float)object->getTexture().width / 8, object->getRect().y, object->getRect().width, object->getRect().height});
     }
 }
