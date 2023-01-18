@@ -28,6 +28,11 @@ void Draw::drawRectangle(int posx, int posy, int width, int height, Color color)
     DrawRectangle(posx, posy, width, height, color);
 }
 
+void Draw::drawRectangleLines(int posX, int posY, int width, int height, Color color)
+{
+    DrawRectangleLines(posX, posY, width, height, color);
+}
+
 void Draw::drawText(const char *text, int posX, int posY, int fontSize, Color color)
 {
     DrawText(text, posX, posY, fontSize, color);

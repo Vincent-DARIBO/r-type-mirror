@@ -9,12 +9,14 @@ namespace Components
     {
     private:
         int _hp;
+        int _maxHp;
 
     public:
         Health(/* args */);
         ~Health();
         int getHp();
         void setHp(int hp);
+        void setMaxHp(int maxHp);
     };
 }
 

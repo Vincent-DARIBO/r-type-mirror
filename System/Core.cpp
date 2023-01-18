@@ -80,3 +80,28 @@ void Core::deleteProjectiles(std::vector<Projectiles *> &projectiles)
         }
     }
 }
+
+Audio Core::getAudio()
+{
+    return _audio;
+}
+
+void Core::closeAudioDevice()
+{
+    CloseAudioDevice();
+}
+
+void Core::endMode2d()
+{
+    EndMode2D();
+}
+
+void Core::initAudioDevice()
+{
+    InitAudioDevice();
+}
+
+void Core::beginMode2d(Camera2D camera)
+{
+    BeginMode2D(camera);
+}

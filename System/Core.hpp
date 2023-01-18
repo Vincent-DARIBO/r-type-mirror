@@ -3,12 +3,13 @@
 
 #include <string>
 #include <raylib.h>
+#include <vector>
+#include <memory>
 #include "./Draw.hpp"
 #include "./Input.hpp"
 #include "../Entity/Player.hpp"
-#include <vector>
-#include <memory>
 #include "./ScreenSize.hpp"
+#include "./Audio.hpp"
 
 class Core
 {
@@ -18,6 +19,7 @@ private:
     std::string _name;
     Draw _draw;
     Input _input;
+    Audio _audio;
     int _keyUp;
     int _keyRight;
     int _keyDown;
@@ -41,6 +43,11 @@ public:
     void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     Vector4 getInputs();
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);
+    Audio getAudio();
+    void closeAudioDevice();
+    void beginMode2d(Camera2D camera);
+    void endMode2d();
+    void initAudioDevice();
 };
 
 #endif
