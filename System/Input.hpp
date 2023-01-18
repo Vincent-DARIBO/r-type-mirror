@@ -16,7 +16,6 @@ private:
 
 public:
     Input(/* args */);
-    Input(int keyUp, int keyRight, int keyDown, int keyLeft);
     ~Input();
     void handler(Player *player, std::vector<Projectiles *> &projectiles, std::unique_ptr<Factory> &projectileFactory, ScreenSize screenSize, Audio audio);
 };

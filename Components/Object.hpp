@@ -17,11 +17,11 @@ namespace Components
         Object(std::string path, Rectangle rect);
         ~Object();
         void setTexture(std::string path);
-        void setRect(Rectangle rect);
-        void setRefRect(Rectangle refRect);
-        Rectangle getRect();
-        Rectangle getRefRect();
         Texture2D getTexture();
+        void setRect(Rectangle rect);
+        Rectangle getRect();
+        void setRefRect(Rectangle refRect);
+        Rectangle getRefRect();
         void unloadTexture();
     };
 }

@@ -10,9 +10,9 @@ private:
 public:
     Draw(/* args */);
     ~Draw();
+    void clearBackground(Color color);
     void beginDrawing();
     void endDrawing();
-    void clearBackground(Color color);
     void drawRectangle(int posx, int posy, int width, int height, Color color);
     void drawRectangleLines(int posx, int posy, int width, int height, Color color);
     void drawText(const char *text, int posX, int posY, int fontSize, Color color);

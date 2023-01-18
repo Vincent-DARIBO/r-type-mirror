@@ -3,7 +3,6 @@
 
 typedef struct ScreenSize
 {
-
     int screenWidth;
     int screenHeight;
 } ScreenSize;

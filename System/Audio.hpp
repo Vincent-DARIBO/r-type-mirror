@@ -10,8 +10,8 @@ private:
 public:
     Audio(/* args */);
     ~Audio();
-    void loadShotSound(const char *path);
     void playShotSound();
+    void loadShotSound(const char *path);
     void unloadShotSound();
 };
 
