@@ -1,4 +1,4 @@
-project(bomberman)
+project(r-type)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
@@ -12,7 +12,7 @@ find_package(Threads REQUIRED)
 if(UNIX)
   find_package(ALSA)
   find_package(MESA)
-  find_package(X11)
+  # find_package(X11)
 endif(UNIX)
 
 # Install raylib
@@ -45,12 +45,14 @@ include_directories(inc)
 # Set Cmake Wildcard
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 file(GLOB ALL_SRCS
-  "src/*.cpp"
-  "src/components/*.cpp"
-  "src/screens/*.cpp"
-  "src/Raylib/*.cpp"
+  "./*.cpp"
+  # "Builders/*.cpp"
+  "Factory/*.cpp"
+  "Components/*.cpp"
+  "Entity/*.cpp"
+  "System/*.cpp"
 )
 
 # Set Sources Files & Link Libraries
-add_executable(bomberman ${ALL_SRCS})
-target_link_libraries(bomberman Threads::Threads  "raylib")
+add_executable(r-type ${ALL_SRCS})
+target_link_libraries(r-type Threads::Threads  "raylib")
