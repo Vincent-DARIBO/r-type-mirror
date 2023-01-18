@@ -8,12 +8,12 @@
 #include "../Entity/Player.hpp"
 #include <vector>
 #include <memory>
+#include "./ScreenSize.hpp"
 
 class Core
 {
 private:
-    int _screenWidth;
-    int _screenHeight;
+    ScreenSize _screenSize;
     int _fps;
     std::string _name;
     Draw _draw;
@@ -22,16 +22,17 @@ private:
     int _keyRight;
     int _keyDown;
     int _keyLeft;
+
 protected:
     Player _player;
+
 public:
     Core(/* args */);
     ~Core();
-    Core(int screenWidth, int screenHeight, std::string name, int fps);
+    Core(ScreenSize screenSize, std::string name, int fps);
     void setFps(int fps);
     int getFps();
-    int getScreenWidth();
-    int getScreenHeight();
+    ScreenSize getScreenSize();
     bool windowShouldClose();
     void closeWindow();
     Draw getDraw();
@@ -39,6 +40,7 @@ public:
     void unloadTexture(Texture2D texture);
     void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     Vector4 getInputs();
+    void deleteProjectiles(std::vector<Projectiles *> &projectiles);
 };
 
 #endif

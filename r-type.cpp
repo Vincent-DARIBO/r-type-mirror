@@ -8,12 +8,10 @@
 
 int main()
 {
-    Core core(1700, 800, "r-type", 60);
+    Core core({1700, 800}, "r-type", 60);
 
     std::unique_ptr<Factory> playerFactory = std::make_unique<PlayerFactory>();
     std::unique_ptr<Factory> projectileFactory = std::make_unique<ProjectilesFactory>();
-    // Factory *playerFactory = new PlayerFactory();
-    // Factory *projectileFactory = new ProjectilesFactory();
 
     Player *player = reinterpret_cast<Player *>(playerFactory->create());
 
@@ -27,11 +25,11 @@ int main()
     player->addComp(std::make_shared<Components::Movements>(movcomp));
     player->addComp(std::make_shared<Components::Animation>(animcomp));
 
-    player->getObjectComp()->setRect({0.0f, 0.0f, (float)player->getObjectComp()->getTexture().width / 8, (float)player->getObjectComp()->getTexture().height / 2});
+    player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)player->getObjectComp()->getTexture().width / 8, (float)player->getObjectComp()->getTexture().height / 2});
 
     std::vector<Projectiles *> projectiles;
 
-    int boxPositionY = core.getScreenHeight() / 2 - 40;
+    int boxPositionY = core.getScreenSize().screenHeight / 2 - 40;
     int scrollSpeed = 4;
 
     player->setKeys({KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT});
@@ -41,8 +39,14 @@ int main()
 
         player->getAnimationComp()->animate(core.getFps(), player->getObjectComp());
 
-        core.getInput().handler(player, &projectiles, projectileFactory);
+        core.getInput().handler(player, projectiles, projectileFactory, core.getScreenSize());
 
+        for (std::size_t i = 0; i < projectiles.size(); i++) {
+            projectiles.at(i)->getAnimationComp()->animate(core.getFps(), projectiles.at(i)->getObjectComp());
+            projectiles.at(i)->getMovementsComp()->move(projectiles.at(i)->getPositionComp(), RIGHT);
+        }
+        
+        core.deleteProjectiles(projectiles);
 
         boxPositionY -= (GetMouseWheelMove() * scrollSpeed);
         core.getDraw().beginDrawing();
@@ -56,7 +60,7 @@ int main()
         DrawRectangleLines(15 + (int)player->getObjectComp()->getRect().x, 40 + (int)player->getObjectComp()->getRect().y, (int)player->getObjectComp()->getRect().width, (int)player->getObjectComp()->getRect().height, RED);
         core.getDraw().drawTextureRec(player->getObjectComp()->getTexture(), player->getObjectComp()->getRect(), player->getPositionComp()->getPosition(), WHITE);
         core.getDraw().drawTexture(player->getObjectComp()->getTexture(), 15, 40, WHITE);
-        core.getDraw().drawRectangle(core.getScreenWidth() / 2 - 40, boxPositionY, 80, 80, MAROON);
+        core.getDraw().drawRectangle(core.getScreenSize().screenWidth / 2 - 40, boxPositionY, 80, 80, MAROON);
 
         core.getDraw().endDrawing();
     }

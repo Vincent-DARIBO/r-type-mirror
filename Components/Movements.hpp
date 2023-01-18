@@ -11,10 +11,6 @@ namespace Components
     {
     private:
         int _speed;
-        int _keyUp;
-        int _keyDown;
-        int _keyRight;
-        int _keyLeft;
     public:
         Movements(/* args */);
         Movements(int speed);

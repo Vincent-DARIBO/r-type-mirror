@@ -38,6 +38,7 @@ void Components::Animation::animate(int fps, std::shared_ptr<Object> object)
         if (_currentFrame >= _limitFrame)
             _currentFrame = 0;
 
-        object->setRect({(float)_currentFrame * (float)object->getTexture().width / 8, object->getRect().y, object->getRect().width, object->getRect().height});
+        // object->setRect({ object->getRefRect().x + ((float)_currentFrame * (float)object->getTexture().width / _limitFrame), object->getRect().y, object->getRect().width, object->getRect().height});
+        object->setRect({ object->getRefRect().x + ((float)_currentFrame * (float)object->getRefRect().width), object->getRect().y, object->getRect().width, object->getRect().height});
     }
 }

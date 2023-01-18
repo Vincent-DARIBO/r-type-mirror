@@ -8,11 +8,10 @@ Core::~Core()
 {
 }
 
-Core::Core(int screenWidth, int screenHeight, std::string name, int fps)
+Core::Core(ScreenSize screenSize, std::string name, int fps)
 {
-    _screenHeight = screenHeight;
-    _screenWidth = screenWidth;
-    InitWindow(_screenWidth, _screenHeight, name.c_str());
+    _screenSize = screenSize;
+    InitWindow(_screenSize.screenWidth, _screenSize.screenHeight, name.c_str());
     _fps = fps;
     SetTargetFPS(_fps);
 }
@@ -28,13 +27,9 @@ int Core::getFps()
     return _fps;
 };
 
-int Core::getScreenWidth()
+ScreenSize Core::getScreenSize()
 {
-    return _screenWidth;
-}
-int Core::getScreenHeight()
-{
-    return _screenHeight;
+    return _screenSize;
 }
 
 Draw Core::getDraw()
@@ -73,5 +68,15 @@ void Core::setInputs(int keyUp, int keyRight, int keyDown, int keyLeft)
 
 Vector4 Core::getInputs()
 {
-    return {_keyUp, _keyRight, _keyDown, _keyLeft};
+    return {(float)_keyUp, (float)_keyRight, (float)_keyDown, (float)_keyLeft};
+}
+
+void Core::deleteProjectiles(std::vector<Projectiles *> &projectiles)
+{
+    for (std::size_t i = 0; i < projectiles.size(); i++) {
+        if (projectiles.at(i)->getPositionComp()->getPosition().x >= _screenSize.screenWidth || projectiles.at(i)->getPositionComp()->getPosition().y >= _screenSize.screenHeight) {
+            projectiles.at(i)->getObjectComp()->unloadTexture();
+            projectiles.erase(projectiles.begin() + i);
+        }
+    }
 }

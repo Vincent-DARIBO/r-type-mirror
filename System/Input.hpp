@@ -8,6 +8,7 @@
 #include <iostream>
 #include "../Factory/ProjectilesFactory.hpp"
 #include "./Keys.hpp"
+#include "./ScreenSize.hpp"
 
 class Input
 {
@@ -17,7 +18,7 @@ public:
     Input(/* args */);
     Input(int keyUp, int keyRight, int keyDown, int keyLeft);
     ~Input();
-    void handler(Player *player, std::vector<Projectiles *> *projectiles, std::unique_ptr<Factory> &projectileFactory);
+    void handler(Player *player, std::vector<Projectiles *> &projectiles, std::unique_ptr<Factory> &projectileFactory, ScreenSize screenSize);
 };
 
 #endif

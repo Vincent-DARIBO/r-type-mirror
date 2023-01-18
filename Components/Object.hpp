@@ -10,6 +10,7 @@ namespace Components
     private:
         Texture2D _texture;
         Rectangle _rect;
+        Rectangle _refRect;
     public:
         Object(/* args */);
         Object(std::string path);
@@ -17,9 +18,11 @@ namespace Components
         ~Object();
         void setTexture(std::string path);
         void setRect(Rectangle rect);
+        void setRefRect(Rectangle refRect);
         Rectangle getRect();
+        Rectangle getRefRect();
         Texture2D getTexture();
-        // void animate();
+        void unloadTexture();
     };
 }
 
