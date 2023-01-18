@@ -1,14 +1,15 @@
 #ifndef _INPUT_
 #define _INPUT_
 
-#include "../Components/IComponent.hpp"
 #include <raylib.h>
-#include "../Entity/Player.hpp"
-#include "../Entity/Projectiles.hpp" 
 #include <iostream>
+#include "../Components/IComponent.hpp"
 #include "../Factory/ProjectilesFactory.hpp"
-#include "./Keys.hpp"
+#include "../Entity/Projectiles.hpp" 
+#include "../Entity/Player.hpp"
 #include "./ScreenSize.hpp"
+#include "./Audio.hpp"
+#include "./Keys.hpp"
 
 class Input
 {

@@ -22,7 +22,7 @@ void Input::handler(Player *player, std::vector<Projectiles *> &projectiles, std
         player->getMovementsComp()->move(player->getPositionComp(), LEFT);
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        audio.playShotSound();
+        // audio.playShotSound();
         projectiles.push_back(reinterpret_cast<Projectiles *>(projectileFactory->create()));
         Components::Position posCompProj({player->getPositionComp()->getPosition().x, player->getPositionComp()->getPosition().y});
         Components::Object objCompProj("../sprites/r-typesheet1.gif");
