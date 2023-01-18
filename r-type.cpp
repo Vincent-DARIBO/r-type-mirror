@@ -83,6 +83,10 @@ int main()
         core.endMode2d();
         core.getDraw().endDrawing();
     }
+
+    for (std::size_t i = 0; i <projectiles.size(); i++)
+        projectiles.at(i)->getObjectComp()->unloadTexture();
+
     core.unloadTexture(player->getObjectComp()->getTexture());
 
     core.getAudio().unloadShotSound();

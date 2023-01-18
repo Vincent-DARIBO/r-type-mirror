@@ -11,6 +11,7 @@ public:
     Audio(/* args */);
     ~Audio();
     void playShotSound();
+    void playShotSound(const char *path);
     void loadShotSound(const char *path);
     void unloadShotSound();
 };
