@@ -1,4 +1,4 @@
-project(rtype)
+project(r-type)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
@@ -91,16 +91,14 @@ include_directories(inc)
 # Set Cmake Wildcard
 file(COPY sprites DESTINATION ${CMAKE_BINARY_DIR})
 file(GLOB ALL_SRCS
-  "main.cpp"
-
-  # "src/*. "
-  # "src/Components/*.cpp"
-  # "src/screens/*.cpp"
-  # "src/Raylib/*.cpp"
+  "./*.cpp"
+  # "Builders/*.cpp"
+  "Factory/*.cpp"
+  "Components/*.cpp"
+  "Entity/*.cpp"
+  "System/*.cpp"
 )
 
 # Set Sources Files & Link Libraries
 add_executable(${PROJECT_NAME} ${ALL_SRCS})
-
-# target_link_libraries(bomberman Threads::Threads "raylib")
-target_link_libraries(${PROJECT_NAME} Threads::Threads ${boost_lib})
+target_link_libraries(${PROJECT_NAME} Threads::Threads  "raylib" ${boost_lib})
