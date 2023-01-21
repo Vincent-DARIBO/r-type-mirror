@@ -92,6 +92,7 @@ include_directories(inc)
 file(COPY sprites DESTINATION ${CMAKE_BINARY_DIR})
 file(GLOB ALL_SRCS
   "./*.cpp"
+
   # "Builders/*.cpp"
   "Factory/*.cpp"
   "Components/*.cpp"
@@ -101,4 +102,11 @@ file(GLOB ALL_SRCS
 
 # Set Sources Files & Link Libraries
 add_executable(${PROJECT_NAME} ${ALL_SRCS})
-target_link_libraries(${PROJECT_NAME} Threads::Threads  "raylib" ${boost_lib})
+target_link_libraries(${PROJECT_NAME} Threads::Threads "raylib" ${boost_lib})
+
+if(UNIX)
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND rm -rf ${PROJECT_SOURCE_DIR}/r-type)
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND cp ${PROJECT_NAME} ${PROJECT_SOURCE_DIR})
+endif(UNIX)
