@@ -16,7 +16,7 @@ int main()
     Player *player = reinterpret_cast<Player *>(playerFactory->create());
 
     Components::Position poscomp({350, 280});
-    Components::Object objcomp("../sprites/r-typesheet23.gif");
+    Components::Object objcomp("./sprites/r-typesheet23.gif");
     Components::Movements movcomp(5);
     Components::Animation animcomp(0, 0, 5, 8);
 
@@ -32,7 +32,7 @@ int main()
     int boxPositionY = core.getScreenSize().screenHeight / 2 - 40;
     int scrollSpeed = 4;
 
-    core.getAudio().loadShotSound("../assets/Blaster.ogg");
+    core.getAudio().loadShotSound("./assets/Blaster.ogg");
 
     player->setKeys({KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT});
 

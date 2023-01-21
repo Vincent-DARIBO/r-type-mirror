@@ -9,6 +9,7 @@
 #include "../Factory/ProjectilesFactory.hpp"
 #include "./Keys.hpp"
 #include "./ScreenSize.hpp"
+#include "./Audio.hpp"
 
 class Input
 {
@@ -17,7 +18,7 @@ private:
 public:
     Input(/* args */);
     ~Input();
-    void handler(Player *player, std::vector<Projectiles *> &projectiles, std::unique_ptr<Factory> &projectileFactory, ScreenSize screenSize, Audio audio);
+    void handler(Player *player, std::vector<Projectiles *> &projectiles, std::unique_ptr<Factory> &projectileFactory, ScreenSize screenSize, Audio &audio);
 };
 
 #endif

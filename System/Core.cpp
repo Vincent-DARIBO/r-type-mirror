@@ -81,7 +81,7 @@ void Core::deleteProjectiles(std::vector<Projectiles *> &projectiles)
     }
 }
 
-Audio Core::getAudio()
+Audio &Core::getAudio()
 {
     return _audio;
 }
