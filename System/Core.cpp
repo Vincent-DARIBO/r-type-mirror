@@ -113,7 +113,7 @@ void Core::game()
 
     unloadTexture(player->getObjectComp()->getTexture());
 
-    // getAudio().unloadShotSound();
+    getAudio().unloadShotSound();
 }
 
 void Core::setFps(int fps)
