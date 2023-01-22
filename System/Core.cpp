@@ -23,7 +23,7 @@ void Core::menu()
 {
     _gameState = MENU;
     while (!windowShouldClose() && _gameState == MENU) {
-        if (IsKeyDown(KEY_E))
+        if (IsKeyDown(R_TYPE_KEY_E))
             _gameState = GAME;
         getDraw().beginDrawing();
         getDraw().clearBackground(RAYWHITE);
@@ -58,7 +58,7 @@ void Core::game()
 
     getAudio().loadShotSound("../assets/Blaster.ogg");
 
-    player->setKeys({KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT});
+    player->setKeys({R_TYPE_UP, R_TYPE_DOWN, R_TYPE_RIGHT, R_TYPE_LEFT});
 
     Camera2D camera = {0};
     camera.target = (Vector2){getScreenSize().screenWidth / 2.0f, getScreenSize().screenHeight / 2.0f};
@@ -83,9 +83,9 @@ void Core::game()
 
         boxPositionY -= (GetMouseWheelMove() * scrollSpeed);
 
-        if (IsKeyDown(KEY_Z)) // touche W sur un clavier AZERTY , raylib est en QWERTY
+        if (IsKeyDown(R_TYPE_KEY_W))
             camera.rotation = -30;
-        else if (IsKeyDown(KEY_X))
+        else if (IsKeyDown(R_TYPE_KEY_X))
             camera.rotation = 30;
 
         getDraw().beginDrawing();
