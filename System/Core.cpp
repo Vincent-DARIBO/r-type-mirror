@@ -56,7 +56,7 @@ void Core::game()
     int boxPositionY = getScreenSize().screenHeight / 2 - 40;
     int scrollSpeed = 4;
 
-    // getAudio().loadShotSound("../assets/Blaster.ogg");
+    getAudio().loadShotSound("../assets/Blaster.ogg");
 
     player->setKeys({KEY_UP, KEY_RIGHT, KEY_DOWN, KEY_LEFT});
 
@@ -183,7 +183,7 @@ void Core::deleteProjectiles(std::vector<Projectiles *> &projectiles)
     }
 }
 
-Audio Core::getAudio()
+Audio &Core::getAudio()
 {
     return _audio;
 }

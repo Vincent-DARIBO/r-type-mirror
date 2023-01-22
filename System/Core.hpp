@@ -44,7 +44,7 @@ public:
     Draw getDraw();
     Input getInput();
     Vector4 getInputs();
-    Audio getAudio();
+    Audio &getAudio();
     int getFps();
     void setFps(int fps);
     void beginMode2d(Camera2D camera);

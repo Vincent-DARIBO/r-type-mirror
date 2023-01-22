@@ -1,6 +1,5 @@
 #include "./Input.hpp"
 #include "../Factory/ProjectilesFactory.hpp"
-#include "./Audio.hpp"
 
 Input::Input(/* args */)
 {
@@ -10,7 +9,7 @@ Input::~Input()
 {
 }
 
-void Input::handler(Player *player, std::vector<Projectiles *> &projectiles, std::unique_ptr<Factory> &projectileFactory, ScreenSize screenSize, Audio audio)
+void Input::handler(Player *player, std::vector<Projectiles *> &projectiles, std::unique_ptr<Factory> &projectileFactory, ScreenSize screenSize, Audio &audio)
 {
     if (IsKeyDown(player->getKeys().key_up) && player->getPositionComp()->getPosition().y - player->getMovementsComp()->getSpeed() >= 0)
         player->getMovementsComp()->move(player->getPositionComp(), UP);
