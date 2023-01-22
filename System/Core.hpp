@@ -10,6 +10,9 @@
 #include "../Entity/Player.hpp"
 #include "./ScreenSize.hpp"
 #include "./Audio.hpp"
+#include "../Factory/PlayerFactory.hpp"
+#include "../Factory/ProjectilesFactory.hpp"
+#include "../Factory/EnnemyFactory.hpp"
 
 enum gameState
 {

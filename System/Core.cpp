@@ -1,6 +1,4 @@
 #include "./Core.hpp"
-#include "../Factory/PlayerFactory.hpp"
-#include "../Factory/ProjectilesFactory.hpp"
 
 Core::~Core()
 {
@@ -27,7 +25,7 @@ void Core::menu()
             _gameState = GAME;
         getDraw().beginDrawing();
         getDraw().clearBackground(RAYWHITE);
-        getDraw().drawText("menu\nappuyez sur e pour passer au jeu", 600, 300, 20, RED);
+        getDraw().drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, RED);
         getDraw().endDrawing();
     }
     game();
@@ -37,8 +35,10 @@ void Core::game()
 {
     std::unique_ptr<Factory> playerFactory = std::make_unique<PlayerFactory>();
     std::unique_ptr<Factory> projectileFactory = std::make_unique<ProjectilesFactory>();
+    std::unique_ptr<Factory> ennemyFactory = std::make_unique<EnnemyFactory>();
 
     Player *player = reinterpret_cast<Player *>(playerFactory->create());
+    Ennemy *ennemy = reinterpret_cast<Ennemy *>(ennemyFactory->create());
 
     Components::Position poscomp({350, 280});
     Components::Object objcomp("../sprites/r-typesheet23.gif");
@@ -49,6 +49,13 @@ void Core::game()
     player->addComp(std::make_shared<Components::Object>(objcomp));
     player->addComp(std::make_shared<Components::Movements>(movcomp));
     player->addComp(std::make_shared<Components::Animation>(animcomp));
+
+
+    Components::Position poscompEnnemy({1400, 400});
+    Components::Object objcompEnnemy("../sprites/r-typesheet23.gif");
+    ennemy->addComp(std::make_shared<Components::Position>(poscompEnnemy));
+    ennemy->addComp(std::make_shared<Components::Object>(objcompEnnemy));
+
 
     player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)player->getObjectComp()->getTexture().width / 8, (float)player->getObjectComp()->getTexture().height / 2});
 
@@ -99,11 +106,12 @@ void Core::game()
         for (std::size_t i = 0; i < projectiles.size(); i++)
             getDraw().drawTextureRec(projectiles.at(i)->getObjectComp()->getTexture(), projectiles.at(i)->getObjectComp()->getRect(), projectiles.at(i)->getPositionComp()->getPosition(), WHITE);
 
-        getDraw().drawRectangleLines(15, 40, player->getObjectComp()->getTexture().width, player->getObjectComp()->getTexture().height, LIME);
-        getDraw().drawRectangleLines(15 + (int)player->getObjectComp()->getRect().x, 40 + (int)player->getObjectComp()->getRect().y, (int)player->getObjectComp()->getRect().width, (int)player->getObjectComp()->getRect().height, RED);
+        getDraw().drawTexture(ennemy->getObjectComp()->getTexture(), ennemy->getPositionComp()->getPosition(), WHITE);
+        getDraw().drawRectangleLines({15, 40}, player->getObjectComp()->getTexture().width, player->getObjectComp()->getTexture().height, LIME);
+        getDraw().drawRectangleLines({15 + (int)player->getObjectComp()->getRect().x, 40 + (int)player->getObjectComp()->getRect().y}, (int)player->getObjectComp()->getRect().width, (int)player->getObjectComp()->getRect().height, RED);
         getDraw().drawTextureRec(player->getObjectComp()->getTexture(), player->getObjectComp()->getRect(), player->getPositionComp()->getPosition(), WHITE);
-        getDraw().drawTexture(player->getObjectComp()->getTexture(), 15, 40, WHITE);
-        getDraw().drawRectangle(getScreenSize().screenWidth / 2 - 40, boxPositionY, 80, 80, MAROON);
+        getDraw().drawTexture(player->getObjectComp()->getTexture(), {15, 40}, WHITE);
+        getDraw().drawRectangle({getScreenSize().screenWidth / 2 - 40, boxPositionY}, 80, 80, MAROON);
 
         endMode2d();
         getDraw().endDrawing();
