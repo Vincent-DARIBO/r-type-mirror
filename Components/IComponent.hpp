@@ -18,20 +18,6 @@ enum ComponentTypes
     ANIMATION,
 };
 
-enum Direction
-{
-    UP,
-    RIGHT,
-    DOWN,
-    LEFT
-};
-
-typedef struct vector2int
-{
-    int x;
-    int y;
-} vector2int;
-
 namespace Components
 {
     class IComponent

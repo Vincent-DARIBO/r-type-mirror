@@ -11,6 +11,12 @@
 #include "./ScreenSize.hpp"
 #include "./Audio.hpp"
 
+enum gameState
+{
+    MENU,
+    GAME,
+};
+
 class Core
 {
 private:
@@ -24,14 +30,16 @@ private:
     int _keyRight;
     int _keyDown;
     int _keyLeft;
+    gameState _gameState;
 
 protected:
     Player _player;
 
 public:
-    Core(/* args */);
     ~Core();
     Core(ScreenSize screenSize, std::string name, int fps);
+    void menu();
+    void game();
     ScreenSize getScreenSize();
     Draw getDraw();
     Input getInput();
