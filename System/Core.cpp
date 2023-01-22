@@ -27,6 +27,7 @@ void Core::menu()
             _gameState = GAME;
         getDraw().beginDrawing();
         getDraw().clearBackground(RAYWHITE);
+        getDraw().drawText("menu\nappuyez sur e pour passer au jeu", 600, 300, 20, RED);
         getDraw().endDrawing();
     }
     game();
@@ -58,7 +59,7 @@ void Core::game()
 
     getAudio().loadShotSound("../assets/Blaster.ogg");
 
-    player->setKeys({R_TYPE_UP, R_TYPE_DOWN, R_TYPE_RIGHT, R_TYPE_LEFT});
+    player->setKeys({R_TYPE_UP, R_TYPE_RIGHT, R_TYPE_DOWN, R_TYPE_LEFT});
 
     Camera2D camera = {0};
     camera.target = (Vector2){getScreenSize().screenWidth / 2.0f, getScreenSize().screenHeight / 2.0f};
