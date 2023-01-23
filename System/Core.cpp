@@ -77,45 +77,10 @@ void Core::initGame()
     _camera = reinterpret_cast<rTypeCamera *>(_cameraFactory->create());
     _heart = reinterpret_cast<Heart *>(_heartFactory->create());
 
-    Components::Position poscomp({350, 280});
-    Components::Object objcomp("../sprites/r-typesheet23.gif");
-    Components::Movements movcomp(5);
-    Components::Animation animcomp(5, 8);
-    Components::Health healthComp(3);
-    Components::Collision collisionComp;
-
-    _player->addComp(std::make_shared<Components::Position>(poscomp));
-    _player->addComp(std::make_shared<Components::Object>(objcomp));
-    _player->addComp(std::make_shared<Components::Movements>(movcomp));
-    _player->addComp(std::make_shared<Components::Animation>(animcomp));
-    _player->addComp(std::make_shared<Components::Health>(healthComp));
-    _player->addComp(std::make_shared<Components::Collision>(collisionComp));
-
     _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
-
-    Components::Position poscompEnnemy({1400, 400});
-    Components::Object objcompEnnemy("../sprites/r-typesheet8.gif");
-    Components::Movements movcompEnnemy(5);
-    Components::Animation animcompEnnemy(5, 8);
-    Components::Ai AiEnnemyComp;
-
-    _ennemy->addComp(std::make_shared<Components::Position>(poscompEnnemy));
-    _ennemy->addComp(std::make_shared<Components::Object>(objcompEnnemy));
-    _ennemy->addComp(std::make_shared<Components::Movements>(movcompEnnemy));
-    _ennemy->addComp(std::make_shared<Components::Animation>(animcompEnnemy));
-    _ennemy->addComp(std::make_shared<Components::Ai>(AiEnnemyComp));
-
     _ennemy->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_ennemy->getObjectComp()->getTexture().width / 8, (float)_ennemy->getObjectComp()->getTexture().height / 2});
-
-    Components::Position poscompHeart({100, 800});
-    Components::Object objcompHeart("../sprites/coeur-rouge-mini.png");
-    _heart->addComp(std::make_shared<Components::Position>(poscompHeart));
-    _heart->addComp(std::make_shared<Components::Object>(objcompHeart));
-
     _player->setKeys({R_TYPE_UP, R_TYPE_RIGHT, R_TYPE_DOWN, R_TYPE_LEFT});
 
-    Components::CameraComp cameraComp((Vector2){getScreenSize().screenWidth / 2.0f, getScreenSize().screenHeight / 2.0f}, (Vector2){getScreenSize().screenWidth / 2.0f, getScreenSize().screenHeight / 2.0f}, 0.0f, 1.0f);
-    _camera->addComp(std::make_shared<Components::CameraComp>(cameraComp));
 }
 
 void Core::drawGame()

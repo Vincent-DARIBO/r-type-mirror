@@ -71,7 +71,7 @@ endif(UNIX)
 # Insatll boost asio
 SET(Boost_USE_STATIC_LIBS OFF)
 SET(Boost_USE_MULTITHREAD ON)
-FIND_PACKAGE(Boost 1.42.0 REQUIRED COMPONENTS system thread regex)
+# FIND_PACKAGE(Boost 1.42.0 REQUIRED COMPONENTS system thread regex)
 
 if(Boost_FOUND)
   INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
