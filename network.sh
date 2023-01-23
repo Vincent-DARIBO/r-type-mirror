@@ -1,0 +1,2 @@
+g++ -std=c++20 -I ../../../Downloads/boost_1_81_0 -pthread server.cpp -L ../../../Downloads/boost_1_81_0/libs -o server
+g++ -std=c++20 -I ../../../Downloads/boost_1_81_0 -pthread client.cpp -L ../../../Downloads/boost_1_81_0/libs -o client
