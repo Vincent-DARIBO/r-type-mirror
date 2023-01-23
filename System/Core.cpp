@@ -14,6 +14,12 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     _fps = fps;
     SetTargetFPS(_fps);
     initAudioDevice();
+    if (!IsWindowFullscreen())
+    {
+        int monitor = GetCurrentMonitor();
+        SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
+        ToggleFullscreen();
+    }
     _gameState = MENU;
     menu();
 }
@@ -76,12 +82,14 @@ void Core::initGame()
     Components::Movements movcomp(5);
     Components::Animation animcomp(5, 8);
     Components::Health healthComp(3);
+    Components::Collision collisionComp;
 
     _player->addComp(std::make_shared<Components::Position>(poscomp));
     _player->addComp(std::make_shared<Components::Object>(objcomp));
     _player->addComp(std::make_shared<Components::Movements>(movcomp));
     _player->addComp(std::make_shared<Components::Animation>(animcomp));
     _player->addComp(std::make_shared<Components::Health>(healthComp));
+    _player->addComp(std::make_shared<Components::Collision>(collisionComp));
 
     _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
 
@@ -98,7 +106,6 @@ void Core::initGame()
     _ennemy->addComp(std::make_shared<Components::Ai>(AiEnnemyComp));
 
     _ennemy->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_ennemy->getObjectComp()->getTexture().width / 8, (float)_ennemy->getObjectComp()->getTexture().height / 2});
-
 
     Components::Position poscompHeart({100, 800});
     Components::Object objcompHeart("../sprites/coeur-rouge-mini.png");
@@ -137,9 +144,7 @@ void Core::drawGame()
 
 void Core::game()
 {
-
     initGame();
-
     while (!windowShouldClose() && _gameState == GAME)
     {
 

@@ -12,7 +12,7 @@ enum ComponentTypes
     OBJECT,
     TEXT,
     CAMERACOMP,
-    // COLLISION,
+    COLLISION,
     AI,
     // RENDER,
     ANIMATION,

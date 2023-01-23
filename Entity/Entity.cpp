@@ -60,3 +60,11 @@ std::shared_ptr<Components::Health> Entity::getHealthComp()
             return std::reinterpret_pointer_cast<Components::Health>(i);
     throw "comp Health not in entity";
 }
+
+std::shared_ptr<Components::Collision> Entity::getCollisionComp()
+{
+    for (auto i : _components)
+        if (i->getComponentType() == COLLISION)
+            return std::reinterpret_pointer_cast<Components::Collision>(i);
+    throw "comp Collision not in entity";
+}
