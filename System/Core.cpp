@@ -73,12 +73,12 @@ void Core::initGame()
     _heartFactory = std::make_unique<HeartFactory>();
 
     _player = reinterpret_cast<Player *>(_playerFactory->create());
-    _ennemy = reinterpret_cast<Ennemy *>(_ennemyFactory->create());
+    _ennemy.push_back(reinterpret_cast<Ennemy *>(_ennemyFactory->create()));
     _camera = reinterpret_cast<rTypeCamera *>(_cameraFactory->create());
     _heart = reinterpret_cast<Heart *>(_heartFactory->create());
 
     _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
-    _ennemy->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_ennemy->getObjectComp()->getTexture().width / 8, (float)_ennemy->getObjectComp()->getTexture().height / 2});
+    _ennemy.at(0)->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_ennemy.at(0)->getObjectComp()->getTexture().width / 8, (float)_ennemy.at(0)->getObjectComp()->getTexture().height / 2});
     _player->setKeys({R_TYPE_UP, R_TYPE_RIGHT, R_TYPE_DOWN, R_TYPE_LEFT});
 
 }
@@ -86,23 +86,20 @@ void Core::initGame()
 void Core::drawGame()
 {
     getDraw().beginDrawing();
-
     getDraw().clearBackground(RAYWHITE);
-
     beginMode2d(_camera->getCameraComp()->getCamera2d());
 
     for (int i = 0; i < _player->getHealthComp()->getHp(); i++)
-        getDraw().drawTexture(_heart->getObjectComp()->getTexture(), {100 + 100 * i, 800}, WHITE);
-
+        getDraw().drawTexture(_heart->getObjectComp()->getTexture(), {50 + 100 * i, 950}, WHITE);
     getDraw().drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
     for (std::size_t i = 0; i < _projectiles.size(); i++)
         getDraw().drawTextureRec(_projectiles.at(i)->getObjectComp()->getTexture(), _projectiles.at(i)->getObjectComp()->getRect(), _projectiles.at(i)->getPositionComp()->getPosition(), WHITE);
-
-    getDraw().drawTextureRec(_ennemy->getObjectComp()->getTexture(), _ennemy->getObjectComp()->getRect(), _ennemy->getPositionComp()->getPosition(), WHITE);
+    getDraw().drawTextureRec(_ennemy.at(0)->getObjectComp()->getTexture(), _ennemy.at(0)->getObjectComp()->getRect(), _ennemy.at(0)->getPositionComp()->getPosition(), WHITE);
     getDraw().drawRectangleLines({15, 40}, _player->getObjectComp()->getTexture().width, _player->getObjectComp()->getTexture().height, LIME);
     getDraw().drawRectangleLines({15 + (int)_player->getObjectComp()->getRect().x, 40 + (int)_player->getObjectComp()->getRect().y}, (int)_player->getObjectComp()->getRect().width, (int)_player->getObjectComp()->getRect().height, RED);
     getDraw().drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
     getDraw().drawTexture(_player->getObjectComp()->getTexture(), {15, 40}, WHITE);
+    
     endMode2d();
     getDraw().endDrawing();
 }
@@ -112,10 +109,9 @@ void Core::game()
     initGame();
     while (!windowShouldClose() && _gameState == GAME)
     {
-
         _player->getAnimationComp()->animate(getFps(), _player->getObjectComp());
-        _ennemy->getAnimationComp()->animate(getFps(), _ennemy->getObjectComp());
-        _ennemy->getAiComp()->play(_ennemy->getPositionComp(), _ennemy->getMovementsComp());
+        _ennemy.at(0)->getAnimationComp()->animate(getFps(), _ennemy.at(0)->getObjectComp());
+        _ennemy.at(0)->getAiComp()->play(_ennemy.at(0)->getPositionComp(), _ennemy.at(0)->getMovementsComp());
 
         getInput().handler(_player, _projectiles, _projectileFactory, getScreenSize(), getAudio());
 
@@ -131,14 +127,13 @@ void Core::game()
             _camera->getCameraComp()->setRotation(-30);
         else if (IsKeyDown(R_TYPE_KEY_X))
             _camera->getCameraComp()->setRotation(30);
-
         drawGame();
     }
 
     for (std::size_t i = 0; i < _projectiles.size(); i++)
         _projectiles.at(i)->getObjectComp()->unloadTexture();
 
-    unloadTexture(_ennemy->getObjectComp()->getTexture());
+    unloadTexture(_ennemy.at(0)->getObjectComp()->getTexture());
     unloadTexture(_heart->getObjectComp()->getTexture());
     unloadTexture(_player->getObjectComp()->getTexture());
 

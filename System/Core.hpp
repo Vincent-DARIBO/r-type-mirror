@@ -46,7 +46,7 @@ private:
     std::unique_ptr<Factory> _ennemyFactory;
     std::unique_ptr<Factory> _cameraFactory;
     std::unique_ptr<Factory> _heartFactory;
-    Ennemy *_ennemy;
+    std::vector<Ennemy *> _ennemy;
     rTypeCamera *_camera;
     std::vector<Projectiles *> _projectiles;
     Heart *_heart;
