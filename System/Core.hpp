@@ -13,10 +13,15 @@
 #include "../Factory/PlayerFactory.hpp"
 #include "../Factory/ProjectilesFactory.hpp"
 #include "../Factory/EnnemyFactory.hpp"
+#include "../Factory/CameraFactory.hpp"
+#include "../Components/CameraComp.hpp"
+#include "../Components/Ai.hpp"
 
 enum gameState
 {
+    CLOSE,
     MENU,
+    OPTION,
     GAME,
 };
 
@@ -34,6 +39,10 @@ private:
     int _keyDown;
     int _keyLeft;
     gameState _gameState;
+    std::unique_ptr<Factory> _playerFactory;
+    std::unique_ptr<Factory> _projectileFactory;
+    std::unique_ptr<Factory> _ennemyFactory;
+    std::unique_ptr<Factory> _cameraFactory;
 
 protected:
     Player _player;
@@ -43,6 +52,7 @@ public:
     Core(ScreenSize screenSize, std::string name, int fps);
     void menu();
     void game();
+    void option();
     ScreenSize getScreenSize();
     Draw getDraw();
     Input getInput();
@@ -50,7 +60,7 @@ public:
     Audio &getAudio();
     int getFps();
     void setFps(int fps);
-    void beginMode2d(Camera2D camera);
+    void beginMode2d(Camera2D &camera);
     void endMode2d();
     bool windowShouldClose();
     void closeWindow();

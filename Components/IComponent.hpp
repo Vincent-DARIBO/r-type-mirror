@@ -6,14 +6,14 @@
 
 enum ComponentTypes
 {
-    // CAMERA,
     HEALTH,
     POSITION,
     MOVEMENTS,
     OBJECT,
     TEXT,
+    CAMERACOMP,
     // COLLISION,
-    // IA,
+    AI,
     // RENDER,
     ANIMATION,
 };

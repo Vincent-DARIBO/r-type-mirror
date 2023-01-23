@@ -21,7 +21,6 @@ void Input::handler(Player *player, std::vector<Projectiles *> &projectiles, std
         player->getMovementsComp()->move(player->getPositionComp(), LEFT);
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
     {
-        // audio.playShotSound("../assets/Blaster.ogg");
         audio.playShotSound();
         projectiles.push_back(reinterpret_cast<Projectiles *>(projectileFactory->create()));
         Components::Position posCompProj({player->getPositionComp()->getPosition().x, player->getPositionComp()->getPosition().y});

@@ -33,9 +33,9 @@ void Draw::drawRectangleLines(Vector2Int pos, int width, int height, Color color
     DrawRectangleLines(pos.x, pos.y, width, height, color);
 }
 
-void Draw::drawText(const char *text, Vector2Int pos, int fontSize, Color color)
+void Draw::drawText(std::string text, Vector2Int pos, int fontSize, Color color)
 {
-    DrawText(text, pos.x, pos.y, fontSize, color);
+    DrawText(text.c_str() , pos.x, pos.y, fontSize, color);
 }
 
 void Draw::drawTexture(Texture2D texture, Vector2Int pos, Color tint)
