@@ -8,44 +8,6 @@ cmake_minimum_required(VERSION 3.17)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-if(UNIX)
-  INCLUDE(FetchContent)
-
-  # install glfw lib -> https://jonathanhamberg.com/post/2019-01-27-cmake-dependencies-fetch-content/
-  find_package(OpenGL)
-
-  if(NOT OPENGL_FOUND)
-    message("**did not find open gl, downloading...**")
-  endif()
-
-  # install xrandr lib
-  find_package(ALSA)
-  find_package(X11)
-
-  if(NOT X11_FOUND)
-    message("**did not find x11**")
-  else()
-    message("**x11 found **")
-  endif()
-
-  if(NOT X11_Xrandr_FOUND)
-    message("**did not find xrandr library**")
-    FetchContent_Declare(
-      xrandr
-      GIT_REPOSITORY https://github.com/freedesktop/xorg-xrandr
-    )
-
-    FetchContent_GetProperties(xrandr)
-
-    if(NOT xrandr_POPULATED)
-      FetchContent_Populate(xrandr)
-
-      add_subdirectory(${xrandr_SOURCE_DIR} ${xrandr_BINARY_DIR})
-    endif()
-  else()
-    message("**x11 lixrandr found**")
-  endif()
-endif(UNIX)
 
 # Install raylib
 if(NOT raylib_FOUND)
@@ -69,9 +31,9 @@ if(UNIX)
 endif(UNIX)
 
 # Insatll boost asio
-SET(Boost_USE_STATIC_LIBS OFF)
+SET(Boost_USE_STATIC_LIBS ON)
 SET(Boost_USE_MULTITHREAD ON)
-# FIND_PACKAGE(Boost 1.42.0 REQUIRED COMPONENTS system thread regex)
+find_package(Boost 1.76.0 REQUIRED COMPONENTS system thread regex asio)
 
 if(Boost_FOUND)
   INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
