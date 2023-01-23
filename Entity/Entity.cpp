@@ -52,3 +52,11 @@ std::shared_ptr<Components::Ai> Entity::getAiComp()
             return std::reinterpret_pointer_cast<Components::Ai>(i);
     throw "comp Ai not in entity";
 }
+
+std::shared_ptr<Components::Health> Entity::getHealthComp()
+{
+    for (auto i : _components)
+        if (i->getComponentType() == HEALTH)
+            return std::reinterpret_pointer_cast<Components::Health>(i);
+    throw "comp Health not in entity";
+}

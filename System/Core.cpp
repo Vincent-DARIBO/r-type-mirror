@@ -9,6 +9,7 @@ Core::~Core()
 Core::Core(ScreenSize screenSize, std::string name, int fps)
 {
     _screenSize = screenSize;
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(_screenSize.screenWidth, _screenSize.screenHeight, name.c_str());
     _fps = fps;
     SetTargetFPS(_fps);
@@ -56,28 +57,33 @@ void Core::option()
     }
 }
 
-void Core::game()
+void Core::initGame()
 {
+    getAudio().loadShotSound("../assets/Blaster.ogg");
     _playerFactory = std::make_unique<PlayerFactory>();
     _projectileFactory = std::make_unique<ProjectilesFactory>();
     _ennemyFactory = std::make_unique<EnnemyFactory>();
     _cameraFactory = std::make_unique<CameraFactory>();
+    _heartFactory = std::make_unique<HeartFactory>();
 
-    Player *player = reinterpret_cast<Player *>(_playerFactory->create());
-    Ennemy *ennemy = reinterpret_cast<Ennemy *>(_ennemyFactory->create());
-    rTypeCamera *camera = reinterpret_cast<rTypeCamera *>(_cameraFactory->create());
+    _player = reinterpret_cast<Player *>(_playerFactory->create());
+    _ennemy = reinterpret_cast<Ennemy *>(_ennemyFactory->create());
+    _camera = reinterpret_cast<rTypeCamera *>(_cameraFactory->create());
+    _heart = reinterpret_cast<Heart *>(_heartFactory->create());
 
     Components::Position poscomp({350, 280});
     Components::Object objcomp("../sprites/r-typesheet23.gif");
     Components::Movements movcomp(5);
     Components::Animation animcomp(5, 8);
+    Components::Health healthComp(3);
 
-    player->addComp(std::make_shared<Components::Position>(poscomp));
-    player->addComp(std::make_shared<Components::Object>(objcomp));
-    player->addComp(std::make_shared<Components::Movements>(movcomp));
-    player->addComp(std::make_shared<Components::Animation>(animcomp));
+    _player->addComp(std::make_shared<Components::Position>(poscomp));
+    _player->addComp(std::make_shared<Components::Object>(objcomp));
+    _player->addComp(std::make_shared<Components::Movements>(movcomp));
+    _player->addComp(std::make_shared<Components::Animation>(animcomp));
+    _player->addComp(std::make_shared<Components::Health>(healthComp));
 
-    player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)player->getObjectComp()->getTexture().width / 8, (float)player->getObjectComp()->getTexture().height / 2});
+    _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
 
     Components::Position poscompEnnemy({1400, 400});
     Components::Object objcompEnnemy("../sprites/r-typesheet8.gif");
@@ -85,76 +91,86 @@ void Core::game()
     Components::Animation animcompEnnemy(5, 8);
     Components::Ai AiEnnemyComp;
 
-    ennemy->addComp(std::make_shared<Components::Position>(poscompEnnemy));
-    ennemy->addComp(std::make_shared<Components::Object>(objcompEnnemy));
-    ennemy->addComp(std::make_shared<Components::Movements>(movcompEnnemy));
-    ennemy->addComp(std::make_shared<Components::Animation>(animcompEnnemy));
-    ennemy->addComp(std::make_shared<Components::Ai>(AiEnnemyComp));
+    _ennemy->addComp(std::make_shared<Components::Position>(poscompEnnemy));
+    _ennemy->addComp(std::make_shared<Components::Object>(objcompEnnemy));
+    _ennemy->addComp(std::make_shared<Components::Movements>(movcompEnnemy));
+    _ennemy->addComp(std::make_shared<Components::Animation>(animcompEnnemy));
+    _ennemy->addComp(std::make_shared<Components::Ai>(AiEnnemyComp));
 
-    ennemy->getObjectComp()->setRefRect({0.0f, 0.0f, (float)ennemy->getObjectComp()->getTexture().width / 8, (float)ennemy->getObjectComp()->getTexture().height / 2});
+    _ennemy->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_ennemy->getObjectComp()->getTexture().width / 8, (float)_ennemy->getObjectComp()->getTexture().height / 2});
 
-    std::vector<Projectiles *> projectiles;
 
-    int boxPositionY = getScreenSize().screenHeight / 2 - 40;
-    int scrollSpeed = 4;
+    Components::Position poscompHeart({100, 800});
+    Components::Object objcompHeart("../sprites/coeur-rouge-mini.png");
+    _heart->addComp(std::make_shared<Components::Position>(poscompHeart));
+    _heart->addComp(std::make_shared<Components::Object>(objcompHeart));
 
-    getAudio().loadShotSound("../assets/Blaster.ogg");
-
-    player->setKeys({R_TYPE_UP, R_TYPE_RIGHT, R_TYPE_DOWN, R_TYPE_LEFT});
+    _player->setKeys({R_TYPE_UP, R_TYPE_RIGHT, R_TYPE_DOWN, R_TYPE_LEFT});
 
     Components::CameraComp cameraComp((Vector2){getScreenSize().screenWidth / 2.0f, getScreenSize().screenHeight / 2.0f}, (Vector2){getScreenSize().screenWidth / 2.0f, getScreenSize().screenHeight / 2.0f}, 0.0f, 1.0f);
-    camera->addComp(std::make_shared<Components::CameraComp>(cameraComp));
-    
+    _camera->addComp(std::make_shared<Components::CameraComp>(cameraComp));
+}
+
+void Core::drawGame()
+{
+    getDraw().beginDrawing();
+
+    getDraw().clearBackground(RAYWHITE);
+
+    beginMode2d(_camera->getCameraComp()->getCamera2d());
+
+    for (int i = 0; i < _player->getHealthComp()->getHp(); i++)
+        getDraw().drawTexture(_heart->getObjectComp()->getTexture(), {100 + 100 * i, 800}, WHITE);
+
+    getDraw().drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
+    for (std::size_t i = 0; i < _projectiles.size(); i++)
+        getDraw().drawTextureRec(_projectiles.at(i)->getObjectComp()->getTexture(), _projectiles.at(i)->getObjectComp()->getRect(), _projectiles.at(i)->getPositionComp()->getPosition(), WHITE);
+
+    getDraw().drawTextureRec(_ennemy->getObjectComp()->getTexture(), _ennemy->getObjectComp()->getRect(), _ennemy->getPositionComp()->getPosition(), WHITE);
+    getDraw().drawRectangleLines({15, 40}, _player->getObjectComp()->getTexture().width, _player->getObjectComp()->getTexture().height, LIME);
+    getDraw().drawRectangleLines({15 + (int)_player->getObjectComp()->getRect().x, 40 + (int)_player->getObjectComp()->getRect().y}, (int)_player->getObjectComp()->getRect().width, (int)_player->getObjectComp()->getRect().height, RED);
+    getDraw().drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
+    getDraw().drawTexture(_player->getObjectComp()->getTexture(), {15, 40}, WHITE);
+    endMode2d();
+    getDraw().endDrawing();
+}
+
+void Core::game()
+{
+
+    initGame();
+
     while (!windowShouldClose() && _gameState == GAME)
     {
 
-        player->getAnimationComp()->animate(getFps(), player->getObjectComp());
-        ennemy->getAnimationComp()->animate(getFps(), ennemy->getObjectComp());
-        // ennemy->getMovementsComp()->move(ennemy->getPositionComp(), LEFT);
-        ennemy->getAiComp()->play(ennemy->getPositionComp(), ennemy->getMovementsComp());
+        _player->getAnimationComp()->animate(getFps(), _player->getObjectComp());
+        _ennemy->getAnimationComp()->animate(getFps(), _ennemy->getObjectComp());
+        _ennemy->getAiComp()->play(_ennemy->getPositionComp(), _ennemy->getMovementsComp());
 
-        getInput().handler(player, projectiles, _projectileFactory, getScreenSize(), getAudio());
+        getInput().handler(_player, _projectiles, _projectileFactory, getScreenSize(), getAudio());
 
-        for (std::size_t i = 0; i < projectiles.size(); i++)
+        for (std::size_t i = 0; i < _projectiles.size(); i++)
         {
-            projectiles.at(i)->getAnimationComp()->animate(getFps(), projectiles.at(i)->getObjectComp());
-            projectiles.at(i)->getMovementsComp()->move(projectiles.at(i)->getPositionComp(), RIGHT);
+            _projectiles.at(i)->getAnimationComp()->animate(getFps(), _projectiles.at(i)->getObjectComp());
+            _projectiles.at(i)->getMovementsComp()->move(_projectiles.at(i)->getPositionComp(), RIGHT);
         }
 
-        deleteProjectiles(projectiles);
-
-        boxPositionY -= (GetMouseWheelMove() * scrollSpeed);
+        deleteProjectiles(_projectiles);
 
         if (IsKeyDown(R_TYPE_KEY_W))
-            camera->getCameraComp()->setRotation(-30);
+            _camera->getCameraComp()->setRotation(-30);
         else if (IsKeyDown(R_TYPE_KEY_X))
-            camera->getCameraComp()->setRotation(30);
+            _camera->getCameraComp()->setRotation(30);
 
-        getDraw().beginDrawing();
-
-        getDraw().clearBackground(RAYWHITE);
-
-        beginMode2d(camera->getCameraComp()->getCamera2d());
-
-        getDraw().drawTextureRec(player->getObjectComp()->getTexture(), player->getObjectComp()->getRect(), player->getPositionComp()->getPosition(), WHITE);
-        for (std::size_t i = 0; i < projectiles.size(); i++)
-            getDraw().drawTextureRec(projectiles.at(i)->getObjectComp()->getTexture(), projectiles.at(i)->getObjectComp()->getRect(), projectiles.at(i)->getPositionComp()->getPosition(), WHITE);
-
-        getDraw().drawTextureRec(ennemy->getObjectComp()->getTexture(), ennemy->getObjectComp()->getRect(), ennemy->getPositionComp()->getPosition(), WHITE);
-        getDraw().drawRectangleLines({15, 40}, player->getObjectComp()->getTexture().width, player->getObjectComp()->getTexture().height, LIME);
-        getDraw().drawRectangleLines({15 + (int)player->getObjectComp()->getRect().x, 40 + (int)player->getObjectComp()->getRect().y}, (int)player->getObjectComp()->getRect().width, (int)player->getObjectComp()->getRect().height, RED);
-        getDraw().drawTextureRec(player->getObjectComp()->getTexture(), player->getObjectComp()->getRect(), player->getPositionComp()->getPosition(), WHITE);
-        getDraw().drawTexture(player->getObjectComp()->getTexture(), {15, 40}, WHITE);
-        getDraw().drawRectangle({getScreenSize().screenWidth / 2 - 40, boxPositionY}, 80, 80, MAROON);
-
-        endMode2d();
-        getDraw().endDrawing();
+        drawGame();
     }
 
-    for (std::size_t i = 0; i < projectiles.size(); i++)
-        projectiles.at(i)->getObjectComp()->unloadTexture();
+    for (std::size_t i = 0; i < _projectiles.size(); i++)
+        _projectiles.at(i)->getObjectComp()->unloadTexture();
 
-    unloadTexture(player->getObjectComp()->getTexture());
+    unloadTexture(_ennemy->getObjectComp()->getTexture());
+    unloadTexture(_heart->getObjectComp()->getTexture());
+    unloadTexture(_player->getObjectComp()->getTexture());
 
     getAudio().unloadShotSound();
 }

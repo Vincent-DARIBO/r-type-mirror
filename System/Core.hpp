@@ -14,8 +14,10 @@
 #include "../Factory/ProjectilesFactory.hpp"
 #include "../Factory/EnnemyFactory.hpp"
 #include "../Factory/CameraFactory.hpp"
+#include "../Factory/HeartFactory.hpp"
 #include "../Components/CameraComp.hpp"
 #include "../Components/Ai.hpp"
+#include "../Components/Health.hpp"
 
 enum gameState
 {
@@ -43,15 +45,23 @@ private:
     std::unique_ptr<Factory> _projectileFactory;
     std::unique_ptr<Factory> _ennemyFactory;
     std::unique_ptr<Factory> _cameraFactory;
+    std::unique_ptr<Factory> _heartFactory;
+    Ennemy *_ennemy;
+    rTypeCamera *_camera;
+    std::vector<Projectiles *> _projectiles;
+    Heart *_heart;
+
 
 protected:
-    Player _player;
+    Player *_player;
 
 public:
     ~Core();
     Core(ScreenSize screenSize, std::string name, int fps);
     void menu();
+    void initGame();
     void game();
+    void drawGame();
     void option();
     ScreenSize getScreenSize();
     Draw getDraw();

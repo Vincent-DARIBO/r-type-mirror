@@ -12,7 +12,7 @@ namespace Components
         int _maxHp;
 
     public:
-        Health(/* args */);
+        Health(int maxHp);
         ~Health();
         int getHp();
         void setHp(int hp);

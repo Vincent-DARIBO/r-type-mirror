@@ -7,7 +7,7 @@
 int main()
 {
     try {
-        Core core({1700, 800}, "r-type", 60);
+        Core core({1920, 1080}, "r-type", 60);
     } catch (std::string e) {
         std::cout << "error :" << e << std::endl;
     }
