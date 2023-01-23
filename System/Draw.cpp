@@ -47,3 +47,8 @@ void Draw::drawTextureRec(Texture2D texture, Rectangle source, Vector2Int positi
 {
     DrawTextureRec(texture, source, {(float)position.x, (float)position.y}, tint);
 }
+
+void Draw::drawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)
+{
+    DrawTexturePro(texture, source, dest, origin, rotation, tint);
+}

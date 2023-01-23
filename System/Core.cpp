@@ -20,6 +20,12 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
         SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
         ToggleFullscreen();
     }
+    _playerFactory = std::make_unique<PlayerFactory>();
+    _projectileFactory = std::make_unique<ProjectilesFactory>();
+    _ennemyFactory = std::make_unique<EnnemyFactory>();
+    _cameraFactory = std::make_unique<CameraFactory>();
+    _heartFactory = std::make_unique<HeartFactory>();
+    _player = reinterpret_cast<Player *>(_playerFactory->create());
     _gameState = MENU;
     menu();
 }
@@ -38,11 +44,48 @@ void Core::menu()
             _gameState = OPTION;
             option();
         }
-        getDraw().beginDrawing();
-        getDraw().clearBackground(RAYWHITE);
-        getDraw().drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, RED);
-        getDraw().drawText("appuyez sur r pour passer aux options", {600, 400}, 20, RED);
-        getDraw().endDrawing();
+        if (IsKeyDown(R_TYPE_KEY_T))
+        {
+            _gameState = SPACESHIP_CHOISE;
+            spaceshipChoise();
+        }
+        _draw.beginDrawing();
+        _draw.clearBackground(RAYWHITE);
+        _draw.drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, RED);
+        _draw.drawText("appuyez sur r pour passer aux options", {600, 400}, 20, RED);
+        _draw.drawText("appuyez sur t pour choisir votre vaisseau", {600, 500}, 20, RED);
+        _draw.endDrawing();
+    }
+}
+
+void Core::spaceshipChoise()
+{
+    std::vector<std::string> filepath{"../sprites/r-typesheet23.gif", "../sprites/r-typesheet24.gif"};
+    size_t i = 0;
+    _player->getPositionComp()->setPosition({300, 300});
+    _player->getObjectComp()->setTexture(filepath.at(i));
+    _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
+    while (!windowShouldClose() && _gameState == SPACESHIP_CHOISE)
+    {
+        if (IsKeyPressed(R_TYPE_KEY_D) && i + 1< filepath.size()) {
+            i ++;
+            _player->getObjectComp()->setTexture(filepath.at(i));
+        }
+        if (IsKeyPressed(R_TYPE_KEY_Q) && i > 0) {
+            i --;
+            _player->getObjectComp()->setTexture(filepath.at(i));
+        }
+        if (IsKeyPressed(R_TYPE_ENTER)) {
+            _gameState = GAME;
+            game();
+        }
+        _draw.beginDrawing();
+        _draw.clearBackground(RAYWHITE);
+        _draw.drawRectangle({300, 300}, 200, 200, BLACK);
+        _draw.drawText("appuyez sur Q/D pour passer au vaisseau suivant", {600, 200}, 20, RED);
+        _draw.drawText("appuyez sur enter pour passer au jeu", {1300, 900}, 20, RED);
+        _draw.drawTexturePro(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRefRect(), {(float)_player->getPositionComp()->getPosition().x, (float)_player->getPositionComp()->getPosition().y, 200, 200}, {0, 0}, 0.0f, WHITE);
+        _draw.endDrawing();
     }
 }
 
@@ -54,25 +97,19 @@ void Core::option()
             setFps(getFps() - 1);
         if (IsKeyPressed(R_TYPE_KEY_P))
             setFps(getFps() + 1);
-        getDraw().beginDrawing();
-        getDraw().clearBackground(RAYWHITE);
-        getDraw().drawText("appuyez sur o pour diminuer les fps", {600, 300}, 20, RED);
-        getDraw().drawText("appuyez sur p pour augmenter les fps", {600, 400}, 20, RED);
-        getDraw().drawText(std::to_string(getFps()), {200, 300}, 20, RED);
-        getDraw().endDrawing();
+        _draw.beginDrawing();
+        _draw.clearBackground(RAYWHITE);
+        _draw.drawText("appuyez sur o pour diminuer les fps", {600, 300}, 20, RED);
+        _draw.drawText("appuyez sur p pour augmenter les fps", {600, 400}, 20, RED);
+        _draw.drawText(std::to_string(getFps()), {200, 300}, 20, RED);
+        _draw.endDrawing();
     }
 }
 
 void Core::initGame()
 {
-    getAudio().loadShotSound("../assets/Blaster.ogg");
-    _playerFactory = std::make_unique<PlayerFactory>();
-    _projectileFactory = std::make_unique<ProjectilesFactory>();
-    _ennemyFactory = std::make_unique<EnnemyFactory>();
-    _cameraFactory = std::make_unique<CameraFactory>();
-    _heartFactory = std::make_unique<HeartFactory>();
+    _audio.loadShotSound("../assets/Blaster.ogg");
 
-    _player = reinterpret_cast<Player *>(_playerFactory->create());
     _ennemy.push_back(reinterpret_cast<Ennemy *>(_ennemyFactory->create()));
     _camera = reinterpret_cast<rTypeCamera *>(_cameraFactory->create());
     _heart = reinterpret_cast<Heart *>(_heartFactory->create());
@@ -85,23 +122,23 @@ void Core::initGame()
 
 void Core::drawGame()
 {
-    getDraw().beginDrawing();
-    getDraw().clearBackground(RAYWHITE);
+    _draw.beginDrawing();
+    _draw.clearBackground(RAYWHITE);
     beginMode2d(_camera->getCameraComp()->getCamera2d());
 
     for (int i = 0; i < _player->getHealthComp()->getHp(); i++)
-        getDraw().drawTexture(_heart->getObjectComp()->getTexture(), {50 + 100 * i, 950}, WHITE);
-    getDraw().drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
+        _draw.drawTexture(_heart->getObjectComp()->getTexture(), {50 + 100 * i, 950}, WHITE);
+    _draw.drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
     for (std::size_t i = 0; i < _projectiles.size(); i++)
-        getDraw().drawTextureRec(_projectiles.at(i)->getObjectComp()->getTexture(), _projectiles.at(i)->getObjectComp()->getRect(), _projectiles.at(i)->getPositionComp()->getPosition(), WHITE);
-    getDraw().drawTextureRec(_ennemy.at(0)->getObjectComp()->getTexture(), _ennemy.at(0)->getObjectComp()->getRect(), _ennemy.at(0)->getPositionComp()->getPosition(), WHITE);
-    getDraw().drawRectangleLines({15, 40}, _player->getObjectComp()->getTexture().width, _player->getObjectComp()->getTexture().height, LIME);
-    getDraw().drawRectangleLines({15 + (int)_player->getObjectComp()->getRect().x, 40 + (int)_player->getObjectComp()->getRect().y}, (int)_player->getObjectComp()->getRect().width, (int)_player->getObjectComp()->getRect().height, RED);
-    getDraw().drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
-    getDraw().drawTexture(_player->getObjectComp()->getTexture(), {15, 40}, WHITE);
+        _draw.drawTextureRec(_projectiles.at(i)->getObjectComp()->getTexture(), _projectiles.at(i)->getObjectComp()->getRect(), _projectiles.at(i)->getPositionComp()->getPosition(), WHITE);
+    _draw.drawTextureRec(_ennemy.at(0)->getObjectComp()->getTexture(), _ennemy.at(0)->getObjectComp()->getRect(), _ennemy.at(0)->getPositionComp()->getPosition(), WHITE);
+    _draw.drawRectangleLines({15, 40}, _player->getObjectComp()->getTexture().width, _player->getObjectComp()->getTexture().height, LIME);
+    _draw.drawRectangleLines({15 + (int)_player->getObjectComp()->getRect().x, 40 + (int)_player->getObjectComp()->getRect().y}, (int)_player->getObjectComp()->getRect().width, (int)_player->getObjectComp()->getRect().height, RED);
+    _draw.drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
+    _draw.drawTexture(_player->getObjectComp()->getTexture(), {15, 40}, WHITE);
     
     endMode2d();
-    getDraw().endDrawing();
+    _draw.endDrawing();
 }
 
 void Core::game()
@@ -113,7 +150,7 @@ void Core::game()
         _ennemy.at(0)->getAnimationComp()->animate(getFps(), _ennemy.at(0)->getObjectComp());
         _ennemy.at(0)->getAiComp()->play(_ennemy.at(0)->getPositionComp(), _ennemy.at(0)->getMovementsComp());
 
-        getInput().handler(_player, _projectiles, _projectileFactory, getScreenSize(), getAudio());
+        _input.handler(_player, _projectiles, _projectileFactory, getScreenSize(), getAudio());
 
         for (std::size_t i = 0; i < _projectiles.size(); i++)
         {
@@ -137,7 +174,7 @@ void Core::game()
     unloadTexture(_heart->getObjectComp()->getTexture());
     unloadTexture(_player->getObjectComp()->getTexture());
 
-    getAudio().unloadShotSound();
+    _audio.unloadShotSound();
 }
 
 void Core::setFps(int fps)
@@ -156,10 +193,10 @@ ScreenSize Core::getScreenSize()
     return _screenSize;
 }
 
-Draw Core::getDraw()
-{
-    return _draw;
-}
+// Draw Core::getDraw()
+// {
+//     return _draw;
+// }
 
 Input Core::getInput()
 {
@@ -181,19 +218,18 @@ void Core::unloadTexture(Texture2D texture)
     UnloadTexture(texture);
 }
 
-void Core::setInputs(int keyUp, int keyRight, int keyDown, int keyLeft)
-{
-    _keyUp = keyUp;
-    std::cout << "_keyUp" << _keyUp << std::endl;
-    _keyRight = keyRight;
-    _keyDown = keyDown;
-    _keyLeft = keyLeft;
-}
+// void Core::setInputs(int keyUp, int keyRight, int keyDown, int keyLeft)
+// {
+//     _keyUp = keyUp;
+//     _keyRight = keyRight;
+//     _keyDown = keyDown;
+//     _keyLeft = keyLeft;
+// }
 
-Vector4 Core::getInputs()
-{
-    return {(float)_keyUp, (float)_keyRight, (float)_keyDown, (float)_keyLeft};
-}
+// Vector4 Core::getInputs()
+// {
+//     return {(float)_keyUp, (float)_keyRight, (float)_keyDown, (float)_keyLeft};
+// }
 
 void Core::deleteProjectiles(std::vector<Projectiles *> &projectiles)
 {

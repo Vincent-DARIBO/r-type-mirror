@@ -40,6 +40,7 @@ typedef enum {
     R_TYPE_DOWN = KEY_DOWN,
     R_TYPE_RIGHT = KEY_RIGHT,
     R_TYPE_LEFT = KEY_LEFT,
+    R_TYPE_ENTER = KEY_ENTER,
 
 } rTypeKeyboardKey;
 
