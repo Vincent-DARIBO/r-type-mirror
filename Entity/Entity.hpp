@@ -26,6 +26,7 @@ public:
     std::shared_ptr<Components::CameraComp> getCameraComp();
     std::shared_ptr<Components::Ai> getAiComp();
     std::shared_ptr<Components::Health> getHealthComp();
+    std::shared_ptr<Components::Collision> getCollisionComp();
 
 private:
     std::vector<std::shared_ptr<Components::IComponent>> _components;

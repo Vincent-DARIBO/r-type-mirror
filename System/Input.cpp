@@ -10,12 +10,12 @@ Input::~Input()
 }
 
 void Input::handler(Player *player, std::vector<Projectiles *> &projectiles, std::unique_ptr<Factory> &projectileFactory, ScreenSize screenSize, Audio &audio)
-{
+{    
     if (IsKeyDown(player->getKeys().key_up) && player->getPositionComp()->getPosition().y - player->getMovementsComp()->getSpeed() >= 0)
         player->getMovementsComp()->move(player->getPositionComp(), UP);
     if (IsKeyDown(player->getKeys().key_right) && player->getPositionComp()->getPosition().x + player->getMovementsComp()->getSpeed() <= screenSize.screenWidth - player->getObjectComp()->getRect().width)
         player->getMovementsComp()->move(player->getPositionComp(), RIGHT);
-    if (IsKeyDown(player->getKeys().key_down) && player->getPositionComp()->getPosition().y + player->getMovementsComp()->getSpeed() <= screenSize.screenHeight - player->getObjectComp()->getRect().height)
+    if (IsKeyDown(player->getKeys().key_down) && player->getPositionComp()->getPosition().y + player->getMovementsComp()->getSpeed() + player->getObjectComp()->getRect().height < screenSize.screenHeight)
         player->getMovementsComp()->move(player->getPositionComp(), DOWN);
     if (IsKeyDown(player->getKeys().key_left) && player->getPositionComp()->getPosition().x - player->getMovementsComp()->getSpeed() >= 0)
         player->getMovementsComp()->move(player->getPositionComp(), LEFT);
