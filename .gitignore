@@ -1,5 +1,6 @@
 r-type_server
 r-type_client
-build/*
+build/
 .vscode/
+reload.sh
 *r-type*

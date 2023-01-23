@@ -17,9 +17,9 @@ namespace Components
 
     public:
         Animation(/* args */);
-        Animation(int _currentFrame, int _framesCounter, int _framesSpeed, int _limitFrame);
+        Animation(int _framesSpeed, int _limitFrame);
         ~Animation();
-        void setFrames(int _currentFrame, int _framesCounter, int _framesSpeed, int _limitFrame);
+        void setFrames(int _framesSpeed, int _limitFrame);
         void animate(int fps, std::shared_ptr<Object> object);
     };
 }

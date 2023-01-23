@@ -10,6 +10,22 @@
 #include "../Entity/Player.hpp"
 #include "./ScreenSize.hpp"
 #include "./Audio.hpp"
+#include "../Factory/PlayerFactory.hpp"
+#include "../Factory/ProjectilesFactory.hpp"
+#include "../Factory/EnnemyFactory.hpp"
+#include "../Factory/CameraFactory.hpp"
+#include "../Factory/HeartFactory.hpp"
+#include "../Components/CameraComp.hpp"
+#include "../Components/Ai.hpp"
+#include "../Components/Health.hpp"
+
+enum gameState
+{
+    CLOSE,
+    MENU,
+    OPTION,
+    GAME,
+};
 
 class Core
 {
@@ -24,22 +40,37 @@ private:
     int _keyRight;
     int _keyDown;
     int _keyLeft;
+    gameState _gameState;
+    std::unique_ptr<Factory> _playerFactory;
+    std::unique_ptr<Factory> _projectileFactory;
+    std::unique_ptr<Factory> _ennemyFactory;
+    std::unique_ptr<Factory> _cameraFactory;
+    std::unique_ptr<Factory> _heartFactory;
+    Ennemy *_ennemy;
+    rTypeCamera *_camera;
+    std::vector<Projectiles *> _projectiles;
+    Heart *_heart;
+
 
 protected:
-    Player _player;
+    Player *_player;
 
 public:
-    Core(/* args */);
     ~Core();
     Core(ScreenSize screenSize, std::string name, int fps);
+    void menu();
+    void initGame();
+    void game();
+    void drawGame();
+    void option();
     ScreenSize getScreenSize();
     Draw getDraw();
     Input getInput();
     Vector4 getInputs();
-    Audio getAudio();
+    Audio &getAudio();
     int getFps();
     void setFps(int fps);
-    void beginMode2d(Camera2D camera);
+    void beginMode2d(Camera2D &camera);
     void endMode2d();
     bool windowShouldClose();
     void closeWindow();

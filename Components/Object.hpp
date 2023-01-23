@@ -9,12 +9,11 @@ namespace Components
     {
     private:
         Texture2D _texture;
-        Rectangle _rect;
+        Rectangle _currentRect;
         Rectangle _refRect;
     public:
         Object(/* args */);
         Object(std::string path);
-        Object(std::string path, Rectangle rect);
         ~Object();
         void setTexture(std::string path);
         Texture2D getTexture();

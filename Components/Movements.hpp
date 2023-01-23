@@ -5,6 +5,14 @@
 #include "./Position.hpp"
 #include <memory>
 
+enum Direction
+{
+    UP,
+    RIGHT,
+    DOWN,
+    LEFT
+};
+
 namespace Components
 {
     class Movements : public IComponent

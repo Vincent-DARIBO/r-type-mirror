@@ -6,31 +6,17 @@
 
 enum ComponentTypes
 {
-    // CAMERA,
     HEALTH,
     POSITION,
     MOVEMENTS,
     OBJECT,
     TEXT,
+    CAMERACOMP,
     // COLLISION,
-    // IA,
+    AI,
     // RENDER,
     ANIMATION,
 };
-
-enum Direction
-{
-    UP,
-    RIGHT,
-    DOWN,
-    LEFT
-};
-
-typedef struct vector2int
-{
-    int x;
-    int y;
-} vector2int;
 
 namespace Components
 {
