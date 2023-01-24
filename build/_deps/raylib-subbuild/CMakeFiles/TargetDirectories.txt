@@ -1,0 +1,3 @@
+/Users/taniabzn/Documents/Epitech/Tek3/R-type/B-CPP-500-LYN-5-2-rtype-tania.bezancon/build/_deps/raylib-subbuild/CMakeFiles/raylib-populate.dir
+/Users/taniabzn/Documents/Epitech/Tek3/R-type/B-CPP-500-LYN-5-2-rtype-tania.bezancon/build/_deps/raylib-subbuild/CMakeFiles/edit_cache.dir
+/Users/taniabzn/Documents/Epitech/Tek3/R-type/B-CPP-500-LYN-5-2-rtype-tania.bezancon/build/_deps/raylib-subbuild/CMakeFiles/rebuild_cache.dir
