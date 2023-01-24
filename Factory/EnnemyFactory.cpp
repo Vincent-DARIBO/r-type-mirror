@@ -12,7 +12,7 @@ Entity *EnnemyFactory::create() const
 {
     Ennemy *ennemy = new Ennemy();
     Components::Position poscompEnnemy({1400, 400});
-    Components::Object objcompEnnemy("../sprites/r-typesheet8.gif");
+    Components::Object objcompEnnemy("../sprites/GamePlay/ennemies/r-typesheet8.gif");
     Components::Movements movcompEnnemy(5);
     Components::Animation animcompEnnemy(5, 8);
     Components::Ai AiEnnemyComp;

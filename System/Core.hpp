@@ -24,6 +24,7 @@ enum gameState
     CLOSE,
     MENU,
     OPTION,
+    SPACESHIP_CHOISE,
     GAME,
 };
 
@@ -36,10 +37,10 @@ private:
     Draw _draw;
     Input _input;
     Audio _audio;
-    int _keyUp;
-    int _keyRight;
-    int _keyDown;
-    int _keyLeft;
+    // int _keyUp;
+    // int _keyRight;
+    // int _keyDown;
+    // int _keyLeft;
     gameState _gameState;
     std::unique_ptr<Factory> _playerFactory;
     std::unique_ptr<Factory> _projectileFactory;
@@ -64,9 +65,8 @@ public:
     void drawGame();
     void option();
     ScreenSize getScreenSize();
-    Draw getDraw();
+    // Draw getDraw();
     Input getInput();
-    Vector4 getInputs();
     Audio &getAudio();
     int getFps();
     void setFps(int fps);
@@ -77,7 +77,9 @@ public:
     void initAudioDevice();
     void closeAudioDevice();
     void unloadTexture(Texture2D texture);
-    void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
+    void spaceShipChoise();
+    // Vector4 getInputs();
+    // void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);
 };
 

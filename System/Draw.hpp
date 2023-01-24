@@ -20,6 +20,7 @@ public:
     void drawText(std::string text, Vector2Int pos, int fontSize, Color color);
     void drawTexture(Texture2D texture, Vector2Int pos, Color tint);
     void drawTextureRec(Texture2D texture, Rectangle source, Vector2Int position, Color tint);
+    void drawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint);
 };
 
 #endif
