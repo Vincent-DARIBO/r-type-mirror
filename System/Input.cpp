@@ -24,7 +24,7 @@ void Input::handler(Player *player, std::vector<Projectiles *> &projectiles, std
         audio.playShotSound();
         projectiles.push_back(reinterpret_cast<Projectiles *>(projectileFactory->create()));
         Components::Position posCompProj({player->getPositionComp()->getPosition().x, player->getPositionComp()->getPosition().y});
-        Components::Object objCompProj("../sprites/r-typesheet1.gif");
+        Components::Object objCompProj("../sprites/GamePlay/explosion/r-typesheet1.gif");
         Components::Animation animCompProjectile(5, 2);
         Components::Movements moveCompProjectile(7);
         projectiles.at(projectiles.size() - 1)->addComp(std::make_shared<Components::Position>(posCompProj));
