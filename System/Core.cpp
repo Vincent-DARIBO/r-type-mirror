@@ -60,7 +60,7 @@ void Core::menu()
 
 void Core::spaceShipChoise()
 {
-    std::vector<std::string> filepath{"../sprites/r-typesheet23.gif", "../sprites/r-typesheet24.gif"};
+    std::vector<std::string> filepath{"../sprites/GamePlay/ennemies/r-typesheet23.gif", "../sprites/GamePlay/ennemies/r-typesheet24.gif"};
     size_t i = 0;
     _player->getPositionComp()->setPosition({300, 300});
     _player->getObjectComp()->setTexture(filepath.at(i));
