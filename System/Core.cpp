@@ -47,7 +47,7 @@ void Core::menu()
         if (IsKeyDown(R_TYPE_KEY_T))
         {
             _gameState = SPACESHIP_CHOISE;
-            spaceshipChoise();
+            spaceShipChoise();
         }
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
@@ -58,7 +58,7 @@ void Core::menu()
     }
 }
 
-void Core::spaceshipChoise()
+void Core::spaceShipChoise()
 {
     std::vector<std::string> filepath{"../sprites/r-typesheet23.gif", "../sprites/r-typesheet24.gif"};
     size_t i = 0;
