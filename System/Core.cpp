@@ -14,12 +14,17 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     _fps = fps;
     SetTargetFPS(_fps);
     initAudioDevice();
+    int monitor = GetCurrentMonitor();
     if (!IsWindowFullscreen())
     {
-        int monitor = GetCurrentMonitor();
         SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
         ToggleFullscreen();
     }
+    if (GetMonitorWidth(monitor) > 1920 && GetMonitorHeight(monitor) > 1080) {
+        SetWindowSize(1920, 1080);
+        ToggleFullscreen();
+    }
+
     _playerFactory = std::make_unique<PlayerFactory>();
     _projectileFactory = std::make_unique<ProjectilesFactory>();
     _ennemyFactory = std::make_unique<EnnemyFactory>();
@@ -62,7 +67,8 @@ void Core::spaceShipChoise()
 {
     std::vector<std::string> filepath{"../sprites/GamePlay/ennemies/r-typesheet23.gif", "../sprites/GamePlay/ennemies/r-typesheet24.gif"};
     size_t i = 0;
-    _player->getPositionComp()->setPosition({300, 300});
+    Texture2D background = LoadTexture("../sprites/Menus/GameLobbyWithoutAnything.png");
+    _player->getPositionComp()->setPosition({130, 650});
     _player->getObjectComp()->setTexture(filepath.at(i));
     _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
     while (!windowShouldClose() && _gameState == SPACESHIP_CHOISE)
@@ -81,9 +87,9 @@ void Core::spaceShipChoise()
         }
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
-        _draw.drawRectangle({300, 300}, 200, 200, BLACK);
-        _draw.drawText("appuyez sur Q/D pour passer au vaisseau suivant", {600, 200}, 20, RED);
-        _draw.drawText("appuyez sur enter pour passer au jeu", {1300, 900}, 20, RED);
+        _draw.drawTexture(background, {0, 0}, WHITE);
+        _draw.drawText("appuyez sur Q/D pour passer au vaisseau suivant", {550, 150}, 20, RED);
+        _draw.drawText("appuyez sur enter pour passer au jeu", {1400, 900}, 20, RED);
         _draw.drawTexturePro(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRefRect(), {(float)_player->getPositionComp()->getPosition().x, (float)_player->getPositionComp()->getPosition().y, 200, 200}, {0, 0}, 0.0f, WHITE);
         _draw.endDrawing();
     }
