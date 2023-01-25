@@ -31,6 +31,7 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     _cameraFactory = std::make_unique<CameraFactory>();
     _heartFactory = std::make_unique<HeartFactory>();
     _buttonFactory = std::make_unique<ButtonFactory>();
+    _backgroundFactory = std::make_unique<BackgroundFactory>();
     _player = reinterpret_cast<Player *>(_playerFactory->create());
     _gameState = MENU;
     handleState();
@@ -175,6 +176,7 @@ void Core::initGame()
     _ennemy.push_back(reinterpret_cast<Ennemy *>(_ennemyFactory->create()));
     _camera = reinterpret_cast<rTypeCamera *>(_cameraFactory->create());
     _heart = reinterpret_cast<Heart *>(_heartFactory->create());
+    _background = reinterpret_cast<Background*>(_backgroundFactory->create());
 
     _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
     _ennemy.at(0)->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_ennemy.at(0)->getObjectComp()->getTexture().width / 8, (float)_ennemy.at(0)->getObjectComp()->getTexture().height / 2});
@@ -188,6 +190,7 @@ void Core::drawGame()
     _draw.clearBackground(RAYWHITE);
     beginMode2d(_camera->getCameraComp()->getCamera2d());
 
+    _draw.drawTexture(_background->getObjectComp()->getTexture(), _background->getPositionComp()->getPosition(), WHITE);
     for (int i = 0; i < _player->getHealthComp()->getHp(); i++)
         _draw.drawTexture(_heart->getObjectComp()->getTexture(), {50 + 100 * i, 950}, WHITE);
     _draw.drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
@@ -227,6 +230,7 @@ void Core::game()
             _camera->getCameraComp()->setRotation(-30);
         else if (IsKeyDown(R_TYPE_KEY_X))
             _camera->getCameraComp()->setRotation(30);
+        _draw.drawTexture(_background->getObjectComp()->getTexture(), _background->getPositionComp()->getPosition(), WHITE);
         drawGame();
     }
 
