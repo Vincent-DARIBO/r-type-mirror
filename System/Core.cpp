@@ -33,28 +33,36 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     _buttonFactory = std::make_unique<ButtonFactory>();
     _player = reinterpret_cast<Player *>(_playerFactory->create());
     _gameState = MENU;
-    menu();
+    handleState();
+}
+
+void Core::handleState()
+{
+    while (1) {
+        if (_gameState == MENU)
+            menu();
+        if (_gameState == GAME)
+            game();
+        if (_gameState == OPTION)
+            option();
+        if (_gameState == SPACESHIP_CHOISE)
+            spaceShipChoise();
+        if (_gameState == CLOSE)
+            break;
+    }
 }
 
 void Core::menu()
 {
-    while (!windowShouldClose() && _gameState == MENU)
+    while (_gameState == MENU)
     {
         if (IsKeyDown(R_TYPE_KEY_E))
-        {
             _gameState = GAME;
-            game();
-        }
         if (IsKeyDown(R_TYPE_KEY_R))
-        {
             _gameState = OPTION;
-            option();
-        }
         if (IsKeyDown(R_TYPE_KEY_T))
-        {
             _gameState = SPACESHIP_CHOISE;
-            spaceShipChoise();
-        }
+        windowShouldClose();
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
         _draw.drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, RED);
@@ -66,25 +74,36 @@ void Core::menu()
 
 void Core::spaceShipChoise()
 {
-    //bouton retour
-    //bouton Create
-    //bouton join
     Button *btnNext = reinterpret_cast<Button *>(_buttonFactory->create());
     btnNext->getPositionComp()->setPosition({1525, 900});
+    btnNext->getTextComp()->setText("Next");
+    btnNext->getTextComp()->setRect({1525, 900, 100, 50});
+
     Button *btnReturn = reinterpret_cast<Button *>(_buttonFactory->create());
     btnReturn->getPositionComp()->setPosition({70, 940});
+    btnReturn->getTextComp()->setText("Return");
+    btnReturn->getTextComp()->setRect({70, 940, 100, 50});
+
     Button *btnCreate = reinterpret_cast<Button *>(_buttonFactory->create());
     btnCreate->getPositionComp()->setPosition({1535, 200});
+    btnCreate->getTextComp()->setText("Create");
+    btnCreate->getTextComp()->setRect({1535, 200, 100, 50});
+
     Button *btnJoin = reinterpret_cast<Button *>(_buttonFactory->create());
     btnJoin->getPositionComp()->setPosition({1535, 300});
+    btnJoin->getTextComp()->setText("Join");
+    btnJoin->getTextComp()->setRect({1535, 300, 100, 50});
+
+
     std::vector<std::string> filepath{"../sprites/GamePlay/ennemies/r-typesheet23.gif", "../sprites/GamePlay/ennemies/r-typesheet24.gif"};
     size_t i = 0;
     Texture2D background = LoadTexture("../sprites/Menus/GameLobbyWithoutAnything.png");
     _player->getPositionComp()->setPosition({130, 650});
     _player->getObjectComp()->setTexture(filepath.at(i));
     _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
-    while (!windowShouldClose() && _gameState == SPACESHIP_CHOISE)
+    while (_gameState == SPACESHIP_CHOISE)
     {
+        windowShouldClose();
         if (IsKeyPressed(R_TYPE_KEY_D) && i + 1< filepath.size()) {
             i ++;
             _player->getObjectComp()->setTexture(filepath.at(i));
@@ -93,19 +112,39 @@ void Core::spaceShipChoise()
             i --;
             _player->getObjectComp()->setTexture(filepath.at(i));
         }
-        if (IsKeyPressed(R_TYPE_ENTER)) {
-            _gameState = GAME;
-            game();
-        }
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
         _draw.drawTexture(background, {0, 0}, WHITE);
-        _draw.drawRectangle(btnNext->getPositionComp()->getPosition(), 350, 70, WHITE);
-        _draw.drawRectangle(btnJoin->getPositionComp()->getPosition(), 320, 60, WHITE);
-        _draw.drawRectangle(btnCreate->getPositionComp()->getPosition(), 320, 60, WHITE);
-        _draw.drawRectangle(btnReturn->getPositionComp()->getPosition(), 320, 60, WHITE);
+
+        if (_input.isInRect(btnNext->getTextComp()->getRect())) {
+            btnNext->getTextComp()->setColor(GREEN);
+            if (_input.isClicked(btnNext->getTextComp()->getRect()))
+                _gameState = GAME;
+        } else 
+            btnNext->getTextComp()->setColor(RED);
+
+        if (_input.isInRect(btnReturn->getTextComp()->getRect())) {
+            btnReturn->getTextComp()->setColor(GREEN);
+            if (_input.isClicked(btnReturn->getTextComp()->getRect()))
+                _gameState = MENU;
+        } else 
+            btnReturn->getTextComp()->setColor(RED);
+
+        if (_input.isInRect(btnCreate->getTextComp()->getRect()))
+            btnCreate->getTextComp()->setColor(GREEN);
+        else 
+            btnCreate->getTextComp()->setColor(RED);
+        if (_input.isInRect(btnJoin->getTextComp()->getRect()))
+            btnJoin->getTextComp()->setColor(GREEN);
+        else 
+            btnJoin->getTextComp()->setColor(RED);
+
+        _draw.drawText(btnNext->getTextComp()->getText(), btnNext->getPositionComp()->getPosition(), btnNext->getTextComp()->getSize(), btnNext->getTextComp()->getColor());
+        _draw.drawText(btnReturn->getTextComp()->getText(), btnReturn->getPositionComp()->getPosition(), btnReturn->getTextComp()->getSize(), btnReturn->getTextComp()->getColor());
+        _draw.drawText(btnCreate->getTextComp()->getText(), btnCreate->getPositionComp()->getPosition(), btnCreate->getTextComp()->getSize(), btnCreate->getTextComp()->getColor());
+        _draw.drawText(btnJoin->getTextComp()->getText(), btnJoin->getPositionComp()->getPosition(), btnJoin->getTextComp()->getSize(), btnJoin->getTextComp()->getColor());
         _draw.drawText("appuyez sur Q/D pour passer au vaisseau suivant", {550, 150}, 20, RED);
-        _draw.drawText("appuyez sur enter pour passer au jeu", {1400, 900}, 20, RED);
+        _draw.drawText("appuyez sur enter pour passer au jeu", {1000, 900}, 20, RED);
         _draw.drawTexturePro(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRefRect(), {(float)_player->getPositionComp()->getPosition().x, (float)_player->getPositionComp()->getPosition().y, 200, 200}, {0, 0}, 0.0f, WHITE);
         _draw.endDrawing();
     }
@@ -113,8 +152,9 @@ void Core::spaceShipChoise()
 
 void Core::option()
 {
-    while (!windowShouldClose() && _gameState == OPTION)
+    while (_gameState == OPTION)
     {
+        windowShouldClose();
         if (IsKeyPressed(R_TYPE_KEY_O))
             setFps(getFps() - 1);
         if (IsKeyPressed(R_TYPE_KEY_P))
@@ -166,8 +206,9 @@ void Core::drawGame()
 void Core::game()
 {
     initGame();
-    while (!windowShouldClose() && _gameState == GAME)
+    while (_gameState == GAME)
     {
+        windowShouldClose();
         _player->getAnimationComp()->animate(getFps(), _player->getObjectComp());
         _ennemy.at(0)->getAnimationComp()->animate(getFps(), _ennemy.at(0)->getObjectComp());
         _ennemy.at(0)->getAiComp()->play(_ennemy.at(0)->getPositionComp(), _ennemy.at(0)->getMovementsComp());
@@ -227,6 +268,8 @@ Input Core::getInput()
 
 bool Core::windowShouldClose()
 {
+    if (WindowShouldClose())
+        _gameState = CLOSE;
     return WindowShouldClose();
 }
 

@@ -83,6 +83,7 @@ public:
     // Vector4 getInputs();
     // void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);
+    void handleState();
 };
 
 #endif

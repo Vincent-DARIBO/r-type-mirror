@@ -34,3 +34,19 @@ void Input::handler(Player *player, std::vector<Projectiles *> &projectiles, std
         projectiles.at(projectiles.size() - 1)->getObjectComp()->setRefRect({232.0f, 103.0f, 17, 12});
     }
 }
+
+bool Input::isInRect(Rectangle rect)
+{
+    if (CheckCollisionPointRec(GetMousePosition(), rect))
+        return true;
+    else
+        return false;
+}
+
+bool Input::isClicked(Rectangle rect)
+{
+    if (CheckCollisionPointRec(GetMousePosition(), rect) && IsMouseButtonPressed(R_TYPE_MOUSE_LEFT))
+        return true;
+    else
+        return false;
+}
