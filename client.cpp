@@ -1,10 +1,11 @@
 #include <iostream>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
+#include <chrono>
+#include <thread>
 
 using namespace boost::asio;
 
-// Structure de données à envoyer
 struct Data
 {
     int a;
@@ -19,18 +20,13 @@ int main()
     ip::udp::socket socket(service, endpoint);
     ip::udp::endpoint server_endpoint(ip::address::from_string("127.0.0.1"), 8080);
 
-    while (true)
-    {
+    while (true) {
         Data data;
         data.a = 1;
         data.b = 3.14f;
-        std::strcpy(data.c, "Hello, World!");
-
-        // Encoder les données en binaire
+        std::strcpy(data.c, "Salut!");
         boost::array<char, sizeof(Data)> send_buf;
         std::memcpy(send_buf.data(), &data, sizeof(Data));
-
-        // Envoyer les données au serveur
         socket.send_to(buffer(send_buf), server_endpoint);
         std::cout << "Sent data: " << data.a << ", " << data.b << ", " << data.c << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(2));
