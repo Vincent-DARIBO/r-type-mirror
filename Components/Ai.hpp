@@ -2,16 +2,19 @@
 #define _AI_
 
 #include "./IComponent.hpp"
+#include "./Position.hpp"
+#include "./Movements.hpp"
 
 namespace Components
 {
-    class Ia : public IComponent
+    class Ai : public IComponent
     {
     private:
-        /* data */
+        Direction _direction;
     public:
-        Ia(/* args */);
-        ~Ia();
+        Ai(/* args */);
+        ~Ai();
+        void play(std::shared_ptr<Components::Position> pos, std::shared_ptr<Components::Movements> movement);
     };
 }
 
