@@ -130,7 +130,7 @@ void Core::option()
 
 void Core::initGame()
 {
-    _audio.loadShotSound("../assets/Blaster.ogg");
+    _audio.loadShotSound("../sprites/Blaster.ogg");
 
     _ennemy.push_back(reinterpret_cast<Ennemy *>(_ennemyFactory->create()));
     _camera = reinterpret_cast<rTypeCamera *>(_cameraFactory->create());
