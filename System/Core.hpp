@@ -18,6 +18,7 @@
 #include "../Components/CameraComp.hpp"
 #include "../Components/Ai.hpp"
 #include "../Components/Health.hpp"
+#include "./ButtonMenu.hpp"
 
 enum gameState
 {
@@ -55,6 +56,7 @@ private:
 
 protected:
     Player *_player;
+    Texture2D _welcomeMenu;
 
 public:
     ~Core();

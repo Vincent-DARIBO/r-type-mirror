@@ -32,6 +32,7 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
 
 void Core::menu()
 {
+    _welcomeMenu = LoadTexture("sprites/Menus/WelcomeBg.png");
     while (!windowShouldClose() && _gameState == MENU)
     {
         if (IsKeyDown(R_TYPE_KEY_E))
@@ -51,9 +52,10 @@ void Core::menu()
         }
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
-        _draw.drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, RED);
-        _draw.drawText("appuyez sur r pour passer aux options", {600, 400}, 20, RED);
-        _draw.drawText("appuyez sur t pour choisir votre vaisseau", {600, 500}, 20, RED);
+        _draw.drawTexture(_welcomeMenu, {0, 0}, WHITE);
+        _draw.drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, WHITE);
+        _draw.drawText("appuyez sur r pour passer aux options", {600, 400}, 20, WHITE);
+        _draw.drawText("appuyez sur t pour choisir votre vaisseau", {600, 500}, 20, WHITE);
         _draw.endDrawing();
     }
 }
