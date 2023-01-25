@@ -15,6 +15,7 @@
 #include "../Factory/EnnemyFactory.hpp"
 #include "../Factory/CameraFactory.hpp"
 #include "../Factory/HeartFactory.hpp"
+#include "../Factory/ButtonFactory.hpp"
 #include "../Components/CameraComp.hpp"
 #include "../Components/Ai.hpp"
 #include "../Components/Health.hpp"
@@ -47,6 +48,7 @@ private:
     std::unique_ptr<Factory> _ennemyFactory;
     std::unique_ptr<Factory> _cameraFactory;
     std::unique_ptr<Factory> _heartFactory;
+    std::unique_ptr<Factory> _buttonFactory;
     std::vector<Ennemy *> _ennemy;
     rTypeCamera *_camera;
     std::vector<Projectiles *> _projectiles;

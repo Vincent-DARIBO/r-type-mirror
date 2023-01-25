@@ -30,6 +30,7 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     _ennemyFactory = std::make_unique<EnnemyFactory>();
     _cameraFactory = std::make_unique<CameraFactory>();
     _heartFactory = std::make_unique<HeartFactory>();
+    _buttonFactory = std::make_unique<ButtonFactory>();
     _player = reinterpret_cast<Player *>(_playerFactory->create());
     _gameState = MENU;
     menu();
@@ -65,6 +66,17 @@ void Core::menu()
 
 void Core::spaceShipChoise()
 {
+    //bouton retour
+    //bouton Create
+    //bouton join
+    Button *btnNext = reinterpret_cast<Button *>(_buttonFactory->create());
+    btnNext->getPositionComp()->setPosition({1525, 900});
+    Button *btnReturn = reinterpret_cast<Button *>(_buttonFactory->create());
+    btnReturn->getPositionComp()->setPosition({70, 940});
+    Button *btnCreate = reinterpret_cast<Button *>(_buttonFactory->create());
+    btnCreate->getPositionComp()->setPosition({1535, 200});
+    Button *btnJoin = reinterpret_cast<Button *>(_buttonFactory->create());
+    btnJoin->getPositionComp()->setPosition({1535, 300});
     std::vector<std::string> filepath{"../sprites/GamePlay/ennemies/r-typesheet23.gif", "../sprites/GamePlay/ennemies/r-typesheet24.gif"};
     size_t i = 0;
     Texture2D background = LoadTexture("../sprites/Menus/GameLobbyWithoutAnything.png");
@@ -88,6 +100,10 @@ void Core::spaceShipChoise()
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
         _draw.drawTexture(background, {0, 0}, WHITE);
+        _draw.drawRectangle(btnNext->getPositionComp()->getPosition(), 350, 70, WHITE);
+        _draw.drawRectangle(btnJoin->getPositionComp()->getPosition(), 320, 60, WHITE);
+        _draw.drawRectangle(btnCreate->getPositionComp()->getPosition(), 320, 60, WHITE);
+        _draw.drawRectangle(btnReturn->getPositionComp()->getPosition(), 320, 60, WHITE);
         _draw.drawText("appuyez sur Q/D pour passer au vaisseau suivant", {550, 150}, 20, RED);
         _draw.drawText("appuyez sur enter pour passer au jeu", {1400, 900}, 20, RED);
         _draw.drawTexturePro(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRefRect(), {(float)_player->getPositionComp()->getPosition().x, (float)_player->getPositionComp()->getPosition().y, 200, 200}, {0, 0}, 0.0f, WHITE);
