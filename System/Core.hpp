@@ -70,9 +70,6 @@ public:
     void drawGame();
     void option();
     ScreenSize getScreenSize();
-    // Draw getDraw();
-    Input getInput();
-    Audio &getAudio();
     int getFps();
     void setFps(int fps);
     void beginMode2d(Camera2D &camera);
@@ -86,8 +83,6 @@ public:
     void unloadTexture(Texture2D texture);
     void spaceShipChoise();
     int getCurrentMonitor();
-    // Vector4 getInputs();
-    // void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);
     void handleState();
     void drawSpaceShipChoise();
@@ -97,6 +92,8 @@ public:
     int getMonitorWidth(int monitor);
     int getMonitorHeight(int monitor);
     void toggleFullscreen();
+    void inputSpaceShipChoise(size_t *i, std::vector<std::string> filepath);
+    void inputGame();
 };
 
 #endif
