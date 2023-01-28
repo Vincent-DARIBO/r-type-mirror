@@ -39,11 +39,12 @@ private:
     Draw _draw;
     Input _input;
     Audio _audio;
-    // int _keyUp;
-    // int _keyRight;
-    // int _keyDown;
-    // int _keyLeft;
     gameState _gameState;
+    Button *_btnNext;
+    Button *_btnReturn;
+    Button *_btnCreate;
+    Button *_btnJoin;
+    Background *_backgroundMenu;
     std::unique_ptr<Factory> _playerFactory;
     std::unique_ptr<Factory> _projectileFactory;
     std::unique_ptr<Factory> _ennemyFactory;
@@ -86,6 +87,8 @@ public:
     // void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);
     void handleState();
+    void drawSpaceShipChoise();
+    void initSpaceShipChoise();
 };
 
 #endif
