@@ -99,11 +99,11 @@ void Core::menu()
 {
     while (_gameState == MENU)
     {
-        if (IsKeyDown(R_TYPE_KEY_E))
+        if (_input.isKeyDown(R_TYPE_KEY_E))
             _gameState = GAME;
-        if (IsKeyDown(R_TYPE_KEY_R))
+        if (_input.isKeyDown(R_TYPE_KEY_R))
             _gameState = OPTION;
-        if (IsKeyDown(R_TYPE_KEY_T))
+        if (_input.isKeyDown(R_TYPE_KEY_T))
             _gameState = SPACESHIP_CHOISE;
         windowShouldClose();
         _draw.beginDrawing();
@@ -167,12 +167,12 @@ void Core::spaceShipChoise()
     while (_gameState == SPACESHIP_CHOISE)
     {
         windowShouldClose();
-        if (IsKeyPressed(R_TYPE_KEY_D) && i + 1 < filepath.size())
+        if (_input.isKeyPressed(R_TYPE_KEY_D) && i + 1 < filepath.size())
         {
             i++;
             _player->getObjectComp()->setTexture(filepath.at(i));
         }
-        if (IsKeyPressed(R_TYPE_KEY_Q) && i > 0)
+        if (_input.isKeyPressed(R_TYPE_KEY_Q) && i > 0)
         {
             i--;
             _player->getObjectComp()->setTexture(filepath.at(i));
@@ -214,9 +214,9 @@ void Core::option()
     while (_gameState == OPTION)
     {
         windowShouldClose();
-        if (IsKeyPressed(R_TYPE_KEY_O))
+        if (_input.isKeyPressed(R_TYPE_KEY_O))
             setFps(getFps() - 1);
-        if (IsKeyPressed(R_TYPE_KEY_P))
+        if (_input.isKeyPressed(R_TYPE_KEY_P))
             setFps(getFps() + 1);
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
@@ -283,9 +283,9 @@ void Core::game()
 
         deleteProjectiles(_projectiles);
 
-        if (IsKeyDown(R_TYPE_KEY_W))
+        if (_input.isKeyDown(R_TYPE_KEY_W))
             _camera->getCameraComp()->setRotation(-30);
-        else if (IsKeyDown(R_TYPE_KEY_X))
+        else if (_input.isKeyDown(R_TYPE_KEY_X))
             _camera->getCameraComp()->setRotation(30);
         _draw.drawTexture(_background->getObjectComp()->getTexture(), _background->getPositionComp()->getPosition(), WHITE);
         drawGame();
