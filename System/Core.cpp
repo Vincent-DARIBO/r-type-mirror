@@ -9,10 +9,9 @@ Core::~Core()
 Core::Core(ScreenSize screenSize, std::string name, int fps)
 {
     _screenSize = screenSize;
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(_screenSize.screenWidth, _screenSize.screenHeight, name.c_str());
-    _fps = fps;
-    SetTargetFPS(_fps);
+    setConfigFlags(FLAG_WINDOW_RESIZABLE);
+    initWindow(name);
+    setFps(fps);
     initAudioDevice();
     int monitor = GetCurrentMonitor();
     if (!IsWindowFullscreen())
@@ -36,6 +35,16 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     _player = reinterpret_cast<Player *>(_playerFactory->create());
     _gameState = MENU;
     handleState();
+}
+
+void Core::initWindow(std::string name)
+{
+    InitWindow(_screenSize.screenWidth, _screenSize.screenHeight, name.c_str());
+}
+
+void Core::setConfigFlags(ConfigFlags configFlags)
+{
+    SetConfigFlags(configFlags);
 }
 
 void Core::handleState()

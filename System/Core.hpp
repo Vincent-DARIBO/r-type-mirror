@@ -79,7 +79,9 @@ public:
     void endMode2d();
     bool windowShouldClose();
     void closeWindow();
+    void setConfigFlags(ConfigFlags configFlags);
     void initAudioDevice();
+    void initWindow(std::string name);
     void closeAudioDevice();
     void unloadTexture(Texture2D texture);
     void spaceShipChoise();
