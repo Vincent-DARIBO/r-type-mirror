@@ -13,16 +13,16 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     initWindow(name);
     setFps(fps);
     initAudioDevice();
-    int monitor = GetCurrentMonitor();
-    if (!IsWindowFullscreen())
+    int monitor = getCurrentMonitor();
+    if (!isWindowFullscreen())
     {
-        SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
-        ToggleFullscreen();
+        setWindowSize(getMonitorWidth(monitor), getMonitorHeight(monitor));
+        toggleFullscreen();
     }
-    if (GetMonitorWidth(monitor) > 1920 && GetMonitorHeight(monitor) > 1080)
+    if (getMonitorWidth(monitor) > 1920 && getMonitorHeight(monitor) > 1080)
     {
         SetWindowSize(1920, 1080);
-        ToggleFullscreen();
+        toggleFullscreen();
     }
 
     _playerFactory = std::make_unique<PlayerFactory>();
@@ -35,6 +35,37 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     _player = reinterpret_cast<Player *>(_playerFactory->create());
     _gameState = MENU;
     handleState();
+}
+
+void Core::toggleFullscreen()
+{
+    ToggleFullscreen();
+}
+
+int Core::getMonitorHeight(int monitor)
+{
+    return GetMonitorHeight(monitor);
+}
+
+
+int Core::getMonitorWidth(int monitor)
+{
+    return GetMonitorWidth(monitor);
+}
+
+void Core::setWindowSize(int width, int height)
+{
+    SetWindowSize(width, height);
+}
+
+bool Core::isWindowFullscreen()
+{
+    return IsWindowFullscreen();
+}
+
+int Core::getCurrentMonitor()
+{
+    return GetCurrentMonitor();
 }
 
 void Core::initWindow(std::string name)

@@ -85,12 +85,18 @@ public:
     void closeAudioDevice();
     void unloadTexture(Texture2D texture);
     void spaceShipChoise();
+    int getCurrentMonitor();
     // Vector4 getInputs();
     // void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);
     void handleState();
     void drawSpaceShipChoise();
     void initSpaceShipChoise();
+    bool isWindowFullscreen();
+    void setWindowSize(int width, int height);
+    int getMonitorWidth(int monitor);
+    int getMonitorHeight(int monitor);
+    void toggleFullscreen();
 };
 
 #endif
