@@ -68,3 +68,11 @@ std::shared_ptr<Components::Collision> Entity::getCollisionComp()
             return std::reinterpret_pointer_cast<Components::Collision>(i);
     throw "comp Collision not in entity";
 }
+
+std::shared_ptr<Components::Text> Entity::getTextComp()
+{
+    for (auto i : _components)
+        if (i->getComponentType() == TEXT)
+            return std::reinterpret_pointer_cast<Components::Text>(i);
+    throw "comp Text not in entity";
+}

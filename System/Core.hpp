@@ -15,6 +15,8 @@
 #include "../Factory/EnnemyFactory.hpp"
 #include "../Factory/CameraFactory.hpp"
 #include "../Factory/HeartFactory.hpp"
+#include "../Factory/ButtonFactory.hpp"
+#include "../Factory/BackgroundFactory.hpp"
 #include "../Components/CameraComp.hpp"
 #include "../Components/Ai.hpp"
 #include "../Components/Health.hpp"
@@ -37,21 +39,24 @@ private:
     Draw _draw;
     Input _input;
     Audio _audio;
-    // int _keyUp;
-    // int _keyRight;
-    // int _keyDown;
-    // int _keyLeft;
     gameState _gameState;
+    Button *_btnNext;
+    Button *_btnReturn;
+    Button *_btnCreate;
+    Button *_btnJoin;
+    Background *_backgroundMenu;
     std::unique_ptr<Factory> _playerFactory;
     std::unique_ptr<Factory> _projectileFactory;
     std::unique_ptr<Factory> _ennemyFactory;
     std::unique_ptr<Factory> _cameraFactory;
     std::unique_ptr<Factory> _heartFactory;
+    std::unique_ptr<Factory> _buttonFactory;
+    std::unique_ptr<Factory> _backgroundFactory;
     std::vector<Ennemy *> _ennemy;
     rTypeCamera *_camera;
     std::vector<Projectiles *> _projectiles;
     Heart *_heart;
-
+    Background *_background;
 
 protected:
     Player *_player;
@@ -65,22 +70,30 @@ public:
     void drawGame();
     void option();
     ScreenSize getScreenSize();
-    // Draw getDraw();
-    Input getInput();
-    Audio &getAudio();
     int getFps();
     void setFps(int fps);
     void beginMode2d(Camera2D &camera);
     void endMode2d();
     bool windowShouldClose();
     void closeWindow();
+    void setConfigFlags(ConfigFlags configFlags);
     void initAudioDevice();
+    void initWindow(std::string name);
     void closeAudioDevice();
     void unloadTexture(Texture2D texture);
     void spaceShipChoise();
-    // Vector4 getInputs();
-    // void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
+    int getCurrentMonitor();
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);
+    void handleState();
+    void drawSpaceShipChoise();
+    void initSpaceShipChoise();
+    bool isWindowFullscreen();
+    void setWindowSize(int width, int height);
+    int getMonitorWidth(int monitor);
+    int getMonitorHeight(int monitor);
+    void toggleFullscreen();
+    void inputSpaceShipChoise(size_t *i, std::vector<std::string> filepath);
+    void inputGame();
 };
 
 #endif
