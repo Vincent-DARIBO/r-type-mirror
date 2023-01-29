@@ -1,6 +1,6 @@
 r-type_server
 r-type_client
 build/*
-.vscode/
+# .vscode/
 *r-type*
 launch_cmake.sh
