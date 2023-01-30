@@ -114,14 +114,13 @@ void Core::option()
 
 void Core::welcomeToYourSpaceship()
 {
-    _welcomeToYourSpaceshipMenu = LoadTexture("sprites/Menus/WelcomeToYourSpaceShip.png");
+    _welcomeToYourSpaceshipMenu = LoadTexture("sprites/Menus/WelcomeToYourSpaceShip-2-2.png");
     
      while (!windowShouldClose() && _gameState == WELCOME_SPACESHIP)
     {
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
-        _draw.drawTexture(_welcomeToYourSpaceshipMenu, {0,0}, WHITE);
-        _draw.drawRectangle({1650, 600}, 150, 60, BLUE);
+        _draw.drawTexture(_welcomeToYourSpaceshipMenu, {-350,0}, WHITE);
         _draw.endDrawing();
     }
 }
