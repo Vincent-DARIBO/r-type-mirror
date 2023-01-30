@@ -1,0 +1,46 @@
+on: 
+  push:
+    branches:
+      - '*'
+
+jobs:
+  unit-test:
+    name: "unit-test"
+    runs-on: ubuntu-20.04
+    container: docker://epitechcontent/epitest-docker
+    steps:
+      - uses: actions/checkout@v3
+      - name: run test
+        run: make tests_run > coverage_outputs
+
+      - name: run test
+        run: make coverage  >> coverage_outputs
+      
+      - name: create arifact
+        run: mkdir -p ./artifacts
+
+      - name: copy coverage
+        run: cp coverage_outputs  ./artifacts/coverage_outputs
+        if: always()
+      - uses: actions/upload-artifact@v3
+        with:
+          name: coverage_outputs
+          path: ./artifacts/coverage_outputs
+      - uses: actions/checkout@v3
+      - name: make
+        run: make 
+      - name: run functional tests
+        run: ./functional-test.sh > function-tests_outputs
+      - name: create functional tests artifact
+        run: mkdir -p ./artifacts
+
+      - name: copy functional tests
+        run: cp function-tests_outputs  ./artifacts/function-tests_outputs
+        if: always()
+      - uses: actions/upload-artifact@v3
+        with:
+          name: function-tests_outputs
+          path: ./artifacts/function-tests_outputs
+
+
+      

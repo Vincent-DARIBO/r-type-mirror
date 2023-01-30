@@ -80,11 +80,3 @@ file(GLOB ALL_SRCS
 SET(boost_required_libs ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY} ${Boost_REGEX_LIBRARY})
 add_executable(${PROJECT_NAME} ${ALL_SRCS})
 target_link_libraries(${PROJECT_NAME} Threads::Threads "raylib" ${boost_required_libs})
-
-# Add r-type to the root of the project
-if(UNIX)
-  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND rm -rf ${PROJECT_SOURCE_DIR}/r-type)
-  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND cp ${PROJECT_NAME} ${PROJECT_SOURCE_DIR})
-endif(UNIX)
