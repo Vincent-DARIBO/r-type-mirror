@@ -24,6 +24,7 @@ enum gameState
     CLOSE,
     MENU,
     OPTION,
+    WELCOME_SPACESHIP,
     SPACESHIP_CHOISE,
     GAME,
 };
@@ -78,6 +79,7 @@ public:
     void closeAudioDevice();
     void unloadTexture(Texture2D texture);
     void spaceShipChoise();
+    void welcomeToYourSpaceship();
     // Vector4 getInputs();
     // void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);

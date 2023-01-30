@@ -32,28 +32,36 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
 
 void Core::menu()
 {
+    Texture2D background = LoadTexture("sprites/Menus/WelcomeToYourSpaceShip.png");
     while (!windowShouldClose() && _gameState == MENU)
     {
-        if (IsKeyDown(R_TYPE_KEY_E))
-        {
-            _gameState = GAME;
-            game();
-        }
-        if (IsKeyDown(R_TYPE_KEY_R))
-        {
-            _gameState = OPTION;
-            option();
-        }
-        if (IsKeyDown(R_TYPE_KEY_T))
-        {
-            _gameState = SPACESHIP_CHOISE;
-            spaceShipChoise();
-        }
+        // if (IsKeyDown(R_TYPE_KEY_E))
+        // {
+        //     _gameState = GAME;
+        //     game();
+        // }
+        // if (IsKeyDown(R_TYPE_KEY_R))
+        // {
+        //     _gameState = OPTION;
+        //     option();
+        // }
+        // if (IsKeyDown(R_TYPE_KEY_T))
+        // {
+        //     _gameState = SPACESHIP_CHOISE;
+        //     spaceShipChoise();
+        // }
+        // if (IsKeyDown(R_TYPE_KEY_V))
+        // {
+        //     _gameState = WELCOME_SPACESHIP;
+        //     welcomeToYourSpaceship();
+        // }
         _draw.beginDrawing();
-        _draw.clearBackground(RAYWHITE);
-        _draw.drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, RED);
-        _draw.drawText("appuyez sur r pour passer aux options", {600, 400}, 20, RED);
-        _draw.drawText("appuyez sur t pour choisir votre vaisseau", {600, 500}, 20, RED);
+         _draw.drawTexture(background, {0, 0}, WHITE);
+        // _draw.clearBackground(RAYWHITE);
+        // _draw.drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, RED);
+        // _draw.drawText("appuyez sur r pour passer aux options", {600, 400}, 20, RED);
+        // _draw.drawText("appuyez sur v pour passer aux welcomeToYourSpaceship", {700, 500}, 20, RED);
+        // _draw.drawText("appuyez sur t pour choisir votre vaisseau", {800, 600}, 20, RED);
         _draw.endDrawing();
     }
 }
@@ -105,6 +113,19 @@ void Core::option()
         _draw.endDrawing();
     }
 }
+
+// void Core::welcomeToYourSpaceship()
+// {
+//     Texture2D background = LoadTexture("../sprites/Menus/WelcomeToYourSpaceShip.png");
+    
+//      while (!windowShouldClose() && _gameState == WELCOME_SPACESHIP)
+//     {
+//         _draw.beginDrawing();
+//         _draw.clearBackground(RAYWHITE);
+//         _draw.drawTexture(background, {0, 0}, WHITE);
+//         _draw.endDrawing();
+//     }
+// }
 
 void Core::initGame()
 {
