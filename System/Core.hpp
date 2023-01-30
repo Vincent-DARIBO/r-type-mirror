@@ -57,6 +57,7 @@ private:
 protected:
     Player *_player;
     Texture2D _welcomeToYourSpaceshipMenu;
+    Texture2D _welcomeToYourSpaceshipMenuButton;
 
 public:
     ~Core();

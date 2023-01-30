@@ -34,22 +34,22 @@ void Core::menu()
 {
     while (!windowShouldClose() && _gameState == MENU)
     {
-        // if (IsKeyDown(R_TYPE_KEY_E))
-        // {
-        //     _gameState = GAME;
-        //     game();
-        // }
-        // if (IsKeyDown(R_TYPE_KEY_R))
-        // {
-        //     _gameState = OPTION;
-        //     option();
-        // }
-        // if (IsKeyDown(R_TYPE_KEY_T))
-        // {
-        //     _gameState = SPACESHIP_CHOISE;
-        //     spaceShipChoise();
-        // }
         if (IsKeyDown(R_TYPE_KEY_E))
+        {
+            _gameState = GAME;
+            game();
+        }
+        if (IsKeyDown(R_TYPE_KEY_R))
+        {
+            _gameState = OPTION;
+            option();
+        }
+        if (IsKeyDown(R_TYPE_KEY_T))
+        {
+            _gameState = SPACESHIP_CHOISE;
+            spaceShipChoise();
+        }
+        if (IsKeyDown(R_TYPE_KEY_V))
         {
             _gameState = WELCOME_SPACESHIP;
             welcomeToYourSpaceship();
@@ -119,8 +119,9 @@ void Core::welcomeToYourSpaceship()
      while (!windowShouldClose() && _gameState == WELCOME_SPACESHIP)
     {
         _draw.beginDrawing();
-         _draw.clearBackground(RAYWHITE);
-        _draw.drawTexture(_welcomeToYourSpaceshipMenu, {60, 0}, WHITE);
+        _draw.clearBackground(RAYWHITE);
+        _draw.drawTexture(_welcomeToYourSpaceshipMenu, {0,0}, WHITE);
+        _draw.drawRectangle({1650, 600}, 150, 60, BLUE);
         _draw.endDrawing();
     }
 }
