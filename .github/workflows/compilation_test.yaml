@@ -17,8 +17,6 @@ jobs:
       - name: run test
         run: chmod 777 launch_cmake.sh && ./launch_cmake.sh
 
-      
-
   build:
     name: "windows compilation"
     runs-on: windows-latest
@@ -31,11 +29,6 @@ jobs:
             os: windows-latest,
             cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
-          }
-        - {
-            name: "Windows Latest MinGW", artifact: "Windows-MinGW.7z",
-            os: windows-latest,
-            cc: "gcc", cxx: "g++"
           }
     steps:
     - uses: actions/checkout@v3
