@@ -17,8 +17,8 @@ Components::Movements::~Movements()
 
 void Components::Movements::move(std::shared_ptr<Position> pos, Direction direction)
 {
-    float x = pos->getPosition().x;
-    float y = pos->getPosition().y;
+    int x = pos->getPosition().x;
+    int y = pos->getPosition().y;
     switch (direction)
     {
     case UP:

@@ -8,14 +8,7 @@ Components::Object::Object(/* args */)
 Components::Object::Object(std::string path)
 {
     _componentType = ComponentTypes::OBJECT;
-    _texture = LoadTexture(path.c_str());
-}
-
-Components::Object::Object(std::string path, Rectangle rect)
-{
-    _componentType = ComponentTypes::OBJECT;
-    _texture = LoadTexture(path.c_str());
-    _rect = rect;
+    setTexture(path);
 }
 
 Components::Object::~Object()
@@ -28,18 +21,18 @@ void Components::Object::setTexture(std::string path)
 
 void Components::Object::setRect(Rectangle rect)
 {
-    _rect = rect;
+    _currentRect = rect;
 }
 
 void Components::Object::setRefRect(Rectangle refRect)
 {
     _refRect = refRect;
-    _rect = _refRect;
+    _currentRect = _refRect;
 }
 
 Rectangle Components::Object::getRect()
 {
-    return _rect;
+    return _currentRect;
 }
 
 Rectangle Components::Object::getRefRect()

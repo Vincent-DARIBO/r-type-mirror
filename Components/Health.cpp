@@ -1,7 +1,10 @@
 #include "./Health.hpp"
 
-Components::Health::Health(/* args */)
+Components::Health::Health(int maxHp)
 {
+    _componentType = HEALTH;
+    _maxHp = maxHp;
+    _hp = _maxHp;
 }
 
 Components::Health::~Health()
