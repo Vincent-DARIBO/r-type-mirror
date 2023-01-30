@@ -120,7 +120,7 @@ void Core::welcomeToYourSpaceship()
     {
         _draw.beginDrawing();
          _draw.clearBackground(RAYWHITE);
-        _draw.drawTexture(_welcomeToYourSpaceshipMenu, {100, 100}, WHITE);
+        _draw.drawTexture(_welcomeToYourSpaceshipMenu, {60, 0}, WHITE);
         _draw.endDrawing();
     }
 }
