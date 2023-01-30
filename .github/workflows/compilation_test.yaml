@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - '*'
+  pull_request:
 env:
   CMAKE_VERSION: 3.24.3
   NINJA_VERSION: 1.11.1
