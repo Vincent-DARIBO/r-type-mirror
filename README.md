@@ -8,6 +8,7 @@
 - [Gitflow](#gitflow)
 - [Commit structure](#commit-structure)
 - [ECS architecture](#ecs-architecture)
+- [VS Code configuration](#vs-code-configuration)
 
 ### Installation
 - [Clone the repository](https://github.com/EpitechPromo2025/B-CPP-500-LYN-5-2-rtype-tania.bezancon)
@@ -52,3 +53,12 @@ The commit type can include the following:
 
 ### ECS architecture
 *To complete*
+
+### VS Code configuration
+
+Name: Prettier - Code formatter
+Id: esbenp.prettier-vscode
+Description: Code formatter using prettier
+Version: 9.10.4
+Publisher: Prettier
+VS Marketplace Link: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode

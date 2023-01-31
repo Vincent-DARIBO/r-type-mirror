@@ -27,6 +27,7 @@ public:
     std::shared_ptr<Components::Ai> getAiComp();
     std::shared_ptr<Components::Health> getHealthComp();
     std::shared_ptr<Components::Collision> getCollisionComp();
+    std::shared_ptr<Components::Text> getTextComp();
 
 private:
     std::vector<std::shared_ptr<Components::IComponent>> _components;

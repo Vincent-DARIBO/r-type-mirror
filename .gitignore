@@ -1,7 +1,12 @@
 r-type_server
 r-type_client
+build/*
+# .vscode/
+*r-type*
+launch_cmake.sh
 build/
 .vscode/
 reload.sh
 *r-type*
 bomberman
+.vs

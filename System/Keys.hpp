@@ -41,6 +41,7 @@ typedef enum {
     R_TYPE_RIGHT = KEY_RIGHT,
     R_TYPE_LEFT = KEY_LEFT,
     R_TYPE_ENTER = KEY_ENTER,
+    R_TYPE_MOUSE_LEFT = MOUSE_BUTTON_LEFT,
 
 } rTypeKeyboardKey;
 
