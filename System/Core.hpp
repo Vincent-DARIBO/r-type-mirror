@@ -20,6 +20,10 @@
 #include "../Components/Health.hpp"
 #include "./ButtonMenu.hpp"
 
+#define GAME_MENU "sprites/Menus/WelcomeBg.png"
+#define MENU_MUSIC "assets/Main_Menu.wav"
+#define GAME_SCREEN "sprites/Menus/GamePlayBg.png"
+
 enum gameState
 {
     CLOSE,
@@ -57,6 +61,8 @@ private:
 protected:
     Player *_player;
     Texture2D _welcomeMenu;
+    Texture2D _gameScreen;
+    Music _music_menu;
 
 public:
     ~Core();

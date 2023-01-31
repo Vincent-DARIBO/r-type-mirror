@@ -32,7 +32,10 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
 
 void Core::menu()
 {
-    _welcomeMenu = LoadTexture("sprites/Menus/WelcomeBg.png");
+    //InitAudioDevice();
+    _welcomeMenu = LoadTexture(GAME_MENU);
+    _gameScreen = LoadTexture(GAME_SCREEN);
+    //_music_menu = LoadMusicStream(MENU_MUSIC);
     while (!windowShouldClose() && _gameState == MENU)
     {
         if (IsKeyDown(R_TYPE_KEY_E))
@@ -53,6 +56,8 @@ void Core::menu()
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
         _draw.drawTexture(_welcomeMenu, {0, 0}, WHITE);
+        //SetMusicVolume(_music_menu, 0.5f);
+        //PlayMusicStream(_music_menu);
         _draw.drawText("menu\nappuyez sur e pour passer au jeu", {600, 300}, 20, WHITE);
         _draw.drawText("appuyez sur r pour passer aux options", {600, 400}, 20, WHITE);
         _draw.drawText("appuyez sur t pour choisir votre vaisseau", {600, 500}, 20, WHITE);
@@ -126,6 +131,7 @@ void Core::drawGame()
 {
     _draw.beginDrawing();
     _draw.clearBackground(RAYWHITE);
+    _draw.drawTexture(_gameScreen, { 0, 0 }, WHITE);
     beginMode2d(_camera->getCameraComp()->getCamera2d());
 
     for (int i = 0; i < _player->getHealthComp()->getHp(); i++)
