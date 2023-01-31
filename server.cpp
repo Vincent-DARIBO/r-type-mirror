@@ -25,7 +25,17 @@ public:
     }
 
 private:
-    void do_receive()
+    void do_receive();
+    void do_send(std::size_t length);
+
+    udp::socket socket_;
+    udp::endpoint sender_endpoint_;
+    std::vector<udp::endpoint> clients;
+    char data_[1024];
+};
+
+void Server::do_receive()
+{
     {
         socket_.async_receive_from(
             boost::asio::buffer(data_, 1024), sender_endpoint_,
@@ -45,22 +55,16 @@ private:
                 do_receive();
             });
     }
+}
 
-    void do_send(std::size_t length)
+void Server::do_send(std::size_t length)
+{
+    for (int i = 0; i != clients.size(); i++)
     {
-        for (int i = 0; i != clients.size(); i++)
-        {
-
-            socket_.send_to(boost::asio::buffer(data_, length), clients[i]);
-            std::cout << "Send data from server to client[" << i << "]" << std ::endl;
-        }
+        socket_.send_to(boost::asio::buffer(data_, length), clients[i]);
+        std::cout << "Send data from server to client[" << i << "]" << std ::endl;
     }
-
-    udp::socket socket_;
-    udp::endpoint sender_endpoint_;
-    std::vector<udp::endpoint> clients;
-    char data_[1024];
-};
+}
 
 int main()
 {
