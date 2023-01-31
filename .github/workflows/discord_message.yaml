@@ -1,15 +1,24 @@
-on: 
-  push:
-    branches:
-      - main
-      - dev
+name: Discord Notify
 
+on:
+  pull_request:
+    types: [opened]
 
+env:
+  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
 jobs:
-  - name: Discord notification
-    env:
-      DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-    uses: Ilshidur/action-discord@master
-    with:
-      args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
+  send_message:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Send Discord message
+      uses: peter-evans/action-slack@v2
+      with:
+        args: >
+          {
+            "username": "Github Actions",
+            "text": "A new pull request has been opened!\nName: ${{ pull_request.title }}\nBranches: ${{ pull_request.head.ref }} -> ${{ pull_request.base.ref }}",
+            "icon_emoji": ":octocat:",
+            "webhook_url": "${{ env.DISCORD_WEBHOOK_URL }}"
+          }

@@ -1,3 +1,5 @@
+name: Compilation test
+
 on: 
   push:
     branches:
