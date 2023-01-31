@@ -27,4 +27,4 @@ jobs:
     - name: Build with CMake
       run: |
         cmake -H. -B_build -G"${{ env.CMAKE_GENERATOR }}" -A"${{ env.CMAKE_ARCH }}"
-        cmake --build _build --config "${{ env.BUILD_CONFIG }}"
+        cmake --build build --config "${{ env.BUILD_CONFIG }}"
