@@ -24,6 +24,7 @@ enum gameState
     CLOSE,
     MENU,
     OPTION,
+    SERVEUR_CONNECTION,
     SPACESHIP_CHOISE,
     GAME,
 };
@@ -55,6 +56,8 @@ private:
 
 protected:
     Player *_player;
+    Texture2D _serveurConnection;
+    Texture2D _serveurConnectionButton;
 
 public:
     ~Core();
@@ -65,6 +68,7 @@ public:
     void drawGame();
     void option();
     ScreenSize getScreenSize();
+    std::string createTextInput(std::__1::string name, float x, float y);
     // Draw getDraw();
     Input getInput();
     Audio &getAudio();
@@ -78,6 +82,7 @@ public:
     void closeAudioDevice();
     void unloadTexture(Texture2D texture);
     void spaceShipChoise();
+    void serveurConnection();
     // Vector4 getInputs();
     // void setInputs(int keyUp, int keyRight, int keyDown, int keyLeft);
     void deleteProjectiles(std::vector<Projectiles *> &projectiles);

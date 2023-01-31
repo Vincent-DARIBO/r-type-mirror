@@ -16,6 +16,7 @@ public:
     void beginDrawing();
     void endDrawing();
     void drawRectangle(Vector2Int pos, int width, int height, Color color);
+    void drawRectangleRec(Rectangle rec, Color color);
     void drawRectangleLines(Vector2Int pos, int width, int height, Color color);
     void drawText(std::string text, Vector2Int pos, int fontSize, Color color);
     void drawTexture(Texture2D texture, Vector2Int pos, Color tint);
