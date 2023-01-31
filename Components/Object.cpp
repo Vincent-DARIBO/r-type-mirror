@@ -8,7 +8,7 @@ Components::Object::Object(/* args */)
 Components::Object::Object(std::string path)
 {
     _componentType = ComponentTypes::OBJECT;
-    _texture = LoadTexture(path.c_str());
+    setTexture(path);
 }
 
 Components::Object::~Object()

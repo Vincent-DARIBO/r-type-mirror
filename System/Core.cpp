@@ -9,25 +9,49 @@ Core::~Core()
 Core::Core(ScreenSize screenSize, std::string name, int fps)
 {
     _screenSize = screenSize;
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(_screenSize.screenWidth, _screenSize.screenHeight, name.c_str());
-    _fps = fps;
-    SetTargetFPS(_fps);
+    setConfigFlags(FLAG_WINDOW_RESIZABLE);
+    initWindow(name);
+    setFps(fps);
     initAudioDevice();
-    if (!IsWindowFullscreen())
+    int monitor = getCurrentMonitor();
+    if (!isWindowFullscreen())
     {
-        int monitor = GetCurrentMonitor();
-        SetWindowSize(GetMonitorWidth(monitor), GetMonitorHeight(monitor));
-        ToggleFullscreen();
+        setWindowSize(getMonitorWidth(monitor), getMonitorHeight(monitor));
+        toggleFullscreen();
     }
+    if (getMonitorWidth(monitor) > 1920 && getMonitorHeight(monitor) > 1080)
+    {
+        SetWindowSize(1920, 1080);
+        toggleFullscreen();
+    }
+
     _playerFactory = std::make_unique<PlayerFactory>();
     _projectileFactory = std::make_unique<ProjectilesFactory>();
     _ennemyFactory = std::make_unique<EnnemyFactory>();
     _cameraFactory = std::make_unique<CameraFactory>();
     _heartFactory = std::make_unique<HeartFactory>();
+    _buttonFactory = std::make_unique<ButtonFactory>();
+    _backgroundFactory = std::make_unique<BackgroundFactory>();
     _player = reinterpret_cast<Player *>(_playerFactory->create());
     _gameState = MENU;
-    menu();
+    handleState();
+}
+
+void Core::handleState()
+{
+    while (1)
+    {
+        if (_gameState == MENU)
+            menu();
+        if (_gameState == GAME)
+            game();
+        if (_gameState == OPTION)
+            option();
+        if (_gameState == SPACESHIP_CHOISE)
+            spaceShipChoise();
+        if (_gameState == CLOSE)
+            break;
+    }
 }
 
 void Core::menu()
@@ -35,21 +59,13 @@ void Core::menu()
     _welcomeMenu = LoadTexture("sprites/Menus/WelcomeBg.png");
     while (!windowShouldClose() && _gameState == MENU)
     {
-        if (IsKeyDown(R_TYPE_KEY_E))
-        {
+        if (_input.isKeyDown(R_TYPE_KEY_E))
             _gameState = GAME;
-            game();
-        }
-        if (IsKeyDown(R_TYPE_KEY_R))
-        {
+        if (_input.isKeyDown(R_TYPE_KEY_R))
             _gameState = OPTION;
-            option();
-        }
-        if (IsKeyDown(R_TYPE_KEY_T))
-        {
+        if (_input.isKeyDown(R_TYPE_KEY_T))
             _gameState = SPACESHIP_CHOISE;
-            spaceShipChoise();
-        }
+        windowShouldClose();
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
         _draw.drawTexture(_welcomeMenu, {0, 0}, WHITE);
@@ -60,44 +76,112 @@ void Core::menu()
     }
 }
 
+void Core::initSpaceShipChoise()
+{
+    _btnNext = reinterpret_cast<Button *>(_buttonFactory->create());
+    _btnNext->getPositionComp()->setPosition({1525, 900});
+    _btnNext->getTextComp()->setText("Next");
+    _btnNext->getTextComp()->setRect({1525, 900, 100, 50});
+
+    _btnReturn = reinterpret_cast<Button *>(_buttonFactory->create());
+    _btnReturn->getPositionComp()->setPosition({70, 940});
+    _btnReturn->getTextComp()->setText("Return");
+    _btnReturn->getTextComp()->setRect({70, 940, 100, 50});
+
+    _btnCreate = reinterpret_cast<Button *>(_buttonFactory->create());
+    _btnCreate->getPositionComp()->setPosition({1535, 200});
+    _btnCreate->getTextComp()->setText("Create");
+    _btnCreate->getTextComp()->setRect({1535, 200, 100, 50});
+
+    _btnJoin = reinterpret_cast<Button *>(_buttonFactory->create());
+    _btnJoin->getPositionComp()->setPosition({1535, 300});
+    _btnJoin->getTextComp()->setText("Join");
+    _btnJoin->getTextComp()->setRect({1535, 300, 100, 50});
+
+    _backgroundMenu = reinterpret_cast<Background *>(_backgroundFactory->create());
+    _backgroundMenu->getObjectComp()->setTexture("../sprites/Menus/GameLobbyWithoutAnything.png");
+    _player->getPositionComp()->setPosition({130, 650});
+}
+
+void Core::inputSpaceShipChoise(size_t *i, std::vector<std::string> filepath)
+{
+    if (_input.isKeyPressed(R_TYPE_KEY_D) && *i + 1 < filepath.size())
+    {
+        *i = *i + 1;
+        _player->getObjectComp()->setTexture(filepath.at(*i));
+    }
+    if (_input.isKeyPressed(R_TYPE_KEY_Q) && *i > 0)
+    {
+        *i = *i - 1;
+        _player->getObjectComp()->setTexture(filepath.at(*i));
+    }
+
+    if (_input.isInRect(_btnNext->getTextComp()->getRect()))
+    {
+        _btnNext->getTextComp()->setColor(GREEN);
+        if (_input.isClicked(_btnNext->getTextComp()->getRect()))
+            _gameState = GAME;
+    }
+    else
+        _btnNext->getTextComp()->setColor(RED);
+
+    if (_input.isInRect(_btnReturn->getTextComp()->getRect()))
+    {
+        _btnReturn->getTextComp()->setColor(GREEN);
+        if (_input.isClicked(_btnReturn->getTextComp()->getRect()))
+            _gameState = MENU;
+    }
+    else
+        _btnReturn->getTextComp()->setColor(RED);
+
+    if (_input.isInRect(_btnCreate->getTextComp()->getRect()))
+        _btnCreate->getTextComp()->setColor(GREEN);
+    else
+        _btnCreate->getTextComp()->setColor(RED);
+    if (_input.isInRect(_btnJoin->getTextComp()->getRect()))
+        _btnJoin->getTextComp()->setColor(GREEN);
+    else
+        _btnJoin->getTextComp()->setColor(RED);
+}
+
 void Core::spaceShipChoise()
 {
+    initSpaceShipChoise();
     std::vector<std::string> filepath{"../sprites/GamePlay/ennemies/r-typesheet23.gif", "../sprites/GamePlay/ennemies/r-typesheet24.gif"};
     size_t i = 0;
-    _player->getPositionComp()->setPosition({300, 300});
     _player->getObjectComp()->setTexture(filepath.at(i));
     _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
-    while (!windowShouldClose() && _gameState == SPACESHIP_CHOISE)
+
+    while (_gameState == SPACESHIP_CHOISE)
     {
-        if (IsKeyPressed(R_TYPE_KEY_D) && i + 1< filepath.size()) {
-            i ++;
-            _player->getObjectComp()->setTexture(filepath.at(i));
-        }
-        if (IsKeyPressed(R_TYPE_KEY_Q) && i > 0) {
-            i --;
-            _player->getObjectComp()->setTexture(filepath.at(i));
-        }
-        if (IsKeyPressed(R_TYPE_ENTER)) {
-            _gameState = GAME;
-            game();
-        }
-        _draw.beginDrawing();
-        _draw.clearBackground(RAYWHITE);
-        _draw.drawRectangle({300, 300}, 200, 200, BLACK);
-        _draw.drawText("appuyez sur Q/D pour passer au vaisseau suivant", {600, 200}, 20, RED);
-        _draw.drawText("appuyez sur enter pour passer au jeu", {1300, 900}, 20, RED);
-        _draw.drawTexturePro(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRefRect(), {(float)_player->getPositionComp()->getPosition().x, (float)_player->getPositionComp()->getPosition().y, 200, 200}, {0, 0}, 0.0f, WHITE);
-        _draw.endDrawing();
+        windowShouldClose();
+        inputSpaceShipChoise(&i, filepath);
+        drawSpaceShipChoise();
     }
+}
+
+void Core::drawSpaceShipChoise()
+{
+    _draw.beginDrawing();
+    _draw.clearBackground(RAYWHITE);
+    _draw.drawTexture(_backgroundMenu->getObjectComp()->getTexture(), {0, 0}, WHITE);
+    _draw.drawText(_btnNext->getTextComp()->getText(), _btnNext->getPositionComp()->getPosition(), _btnNext->getTextComp()->getSize(), _btnNext->getTextComp()->getColor());
+    _draw.drawText(_btnReturn->getTextComp()->getText(), _btnReturn->getPositionComp()->getPosition(), _btnReturn->getTextComp()->getSize(), _btnReturn->getTextComp()->getColor());
+    _draw.drawText(_btnCreate->getTextComp()->getText(), _btnCreate->getPositionComp()->getPosition(), _btnCreate->getTextComp()->getSize(), _btnCreate->getTextComp()->getColor());
+    _draw.drawText(_btnJoin->getTextComp()->getText(), _btnJoin->getPositionComp()->getPosition(), _btnJoin->getTextComp()->getSize(), _btnJoin->getTextComp()->getColor());
+    _draw.drawText("appuyez sur Q/D pour passer au vaisseau suivant", {550, 150}, 20, RED);
+    _draw.drawTexturePro(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRefRect(), {(float)_player->getPositionComp()->getPosition().x, (float)_player->getPositionComp()->getPosition().y, 200, 200}, {0, 0}, 0.0f, WHITE);
+    _draw.endDrawing();
 }
 
 void Core::option()
 {
-    while (!windowShouldClose() && _gameState == OPTION)
+    while (_gameState == OPTION)
     {
-        if (IsKeyPressed(R_TYPE_KEY_O))
+        windowShouldClose();
+        if (_input.isKeyPressed(R_TYPE_KEY_O))
             setFps(getFps() - 1);
-        if (IsKeyPressed(R_TYPE_KEY_P))
+        if (_input.isKeyPressed(R_TYPE_KEY_P))
             setFps(getFps() + 1);
         _draw.beginDrawing();
         _draw.clearBackground(RAYWHITE);
@@ -110,49 +194,55 @@ void Core::option()
 
 void Core::initGame()
 {
-    _audio.loadShotSound("../assets/Blaster.ogg");
+    _audio.loadShotSound("../sprites/Blaster.ogg");
 
     _ennemy.push_back(reinterpret_cast<Ennemy *>(_ennemyFactory->create()));
     _camera = reinterpret_cast<rTypeCamera *>(_cameraFactory->create());
     _heart = reinterpret_cast<Heart *>(_heartFactory->create());
+    _background = reinterpret_cast<Background *>(_backgroundFactory->create());
 
     _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
     _ennemy.at(0)->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_ennemy.at(0)->getObjectComp()->getTexture().width / 8, (float)_ennemy.at(0)->getObjectComp()->getTexture().height / 2});
     _player->setKeys({R_TYPE_UP, R_TYPE_RIGHT, R_TYPE_DOWN, R_TYPE_LEFT});
-
 }
 
-void Core::drawGame()
+void Core::inputGame()
 {
-    _draw.beginDrawing();
-    _draw.clearBackground(RAYWHITE);
-    beginMode2d(_camera->getCameraComp()->getCamera2d());
-
-    for (int i = 0; i < _player->getHealthComp()->getHp(); i++)
-        _draw.drawTexture(_heart->getObjectComp()->getTexture(), {50 + 100 * i, 950}, WHITE);
-    _draw.drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
-    for (std::size_t i = 0; i < _projectiles.size(); i++)
-        _draw.drawTextureRec(_projectiles.at(i)->getObjectComp()->getTexture(), _projectiles.at(i)->getObjectComp()->getRect(), _projectiles.at(i)->getPositionComp()->getPosition(), WHITE);
-    _draw.drawTextureRec(_ennemy.at(0)->getObjectComp()->getTexture(), _ennemy.at(0)->getObjectComp()->getRect(), _ennemy.at(0)->getPositionComp()->getPosition(), WHITE);
-    _draw.drawRectangleLines({15, 40}, _player->getObjectComp()->getTexture().width, _player->getObjectComp()->getTexture().height, LIME);
-    _draw.drawRectangleLines({15 + (int)_player->getObjectComp()->getRect().x, 40 + (int)_player->getObjectComp()->getRect().y}, (int)_player->getObjectComp()->getRect().width, (int)_player->getObjectComp()->getRect().height, RED);
-    _draw.drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
-    _draw.drawTexture(_player->getObjectComp()->getTexture(), {15, 40}, WHITE);
-    
-    endMode2d();
-    _draw.endDrawing();
+    if (_input.isKeyDown(_player->getKeys().key_up) && _player->getPositionComp()->getPosition().y - _player->getMovementsComp()->getSpeed() >= 0)
+        _player->getMovementsComp()->move(_player->getPositionComp(), UP);
+    if (_input.isKeyDown(_player->getKeys().key_right) && _player->getPositionComp()->getPosition().x + _player->getMovementsComp()->getSpeed() <= _screenSize.screenWidth - _player->getObjectComp()->getRect().width)
+        _player->getMovementsComp()->move(_player->getPositionComp(), RIGHT);
+    if (_input.isKeyDown(_player->getKeys().key_down) && _player->getPositionComp()->getPosition().y + _player->getMovementsComp()->getSpeed() + _player->getObjectComp()->getRect().height < _screenSize.screenHeight)
+        _player->getMovementsComp()->move(_player->getPositionComp(), DOWN);
+    if (_input.isKeyDown(_player->getKeys().key_left) && _player->getPositionComp()->getPosition().x - _player->getMovementsComp()->getSpeed() >= 0)
+        _player->getMovementsComp()->move(_player->getPositionComp(), LEFT);
+    if (_input.isMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    {
+        _audio.playShotSound();
+        _projectiles.push_back(reinterpret_cast<Projectiles *>(_projectileFactory->create()));
+        Components::Position posCompProj({_player->getPositionComp()->getPosition().x, _player->getPositionComp()->getPosition().y});
+        Components::Object objCompProj("../sprites/GamePlay/explosion/r-typesheet1.gif");
+        Components::Animation animCompProjectile(5, 2);
+        Components::Movements moveCompProjectile(7);
+        _projectiles.at(_projectiles.size() - 1)->addComp(std::make_shared<Components::Position>(posCompProj));
+        _projectiles.at(_projectiles.size() - 1)->addComp(std::make_shared<Components::Object>(objCompProj));
+        _projectiles.at(_projectiles.size() - 1)->addComp(std::make_shared<Components::Animation>(animCompProjectile));
+        _projectiles.at(_projectiles.size() - 1)->addComp(std::make_shared<Components::Movements>(moveCompProjectile));
+        _projectiles.at(_projectiles.size() - 1)->getObjectComp()->setRefRect({232.0f, 103.0f, 17, 12});
+    }
 }
 
 void Core::game()
 {
     initGame();
-    while (!windowShouldClose() && _gameState == GAME)
+    while (_gameState == GAME)
     {
+        windowShouldClose();
         _player->getAnimationComp()->animate(getFps(), _player->getObjectComp());
         _ennemy.at(0)->getAnimationComp()->animate(getFps(), _ennemy.at(0)->getObjectComp());
         _ennemy.at(0)->getAiComp()->play(_ennemy.at(0)->getPositionComp(), _ennemy.at(0)->getMovementsComp());
 
-        _input.handler(_player, _projectiles, _projectileFactory, getScreenSize(), getAudio());
+        inputGame();
 
         for (std::size_t i = 0; i < _projectiles.size(); i++)
         {
@@ -162,10 +252,11 @@ void Core::game()
 
         deleteProjectiles(_projectiles);
 
-        if (IsKeyDown(R_TYPE_KEY_W))
+        if (_input.isKeyDown(R_TYPE_KEY_W))
             _camera->getCameraComp()->setRotation(-30);
-        else if (IsKeyDown(R_TYPE_KEY_X))
+        else if (_input.isKeyDown(R_TYPE_KEY_X))
             _camera->getCameraComp()->setRotation(30);
+        _draw.drawTexture(_background->getObjectComp()->getTexture(), _background->getPositionComp()->getPosition(), WHITE);
         drawGame();
     }
 
@@ -177,6 +268,28 @@ void Core::game()
     unloadTexture(_player->getObjectComp()->getTexture());
 
     _audio.unloadShotSound();
+}
+
+void Core::drawGame()
+{
+    _draw.beginDrawing();
+    _draw.clearBackground(RAYWHITE);
+    beginMode2d(_camera->getCameraComp()->getCamera2d());
+
+    _draw.drawTexture(_background->getObjectComp()->getTexture(), _background->getPositionComp()->getPosition(), WHITE);
+    for (int i = 0; i < _player->getHealthComp()->getHp(); i++)
+        _draw.drawTexture(_heart->getObjectComp()->getTexture(), {50 + 100 * i, 950}, WHITE);
+    _draw.drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
+    for (std::size_t i = 0; i < _projectiles.size(); i++)
+        _draw.drawTextureRec(_projectiles.at(i)->getObjectComp()->getTexture(), _projectiles.at(i)->getObjectComp()->getRect(), _projectiles.at(i)->getPositionComp()->getPosition(), WHITE);
+    _draw.drawTextureRec(_ennemy.at(0)->getObjectComp()->getTexture(), _ennemy.at(0)->getObjectComp()->getRect(), _ennemy.at(0)->getPositionComp()->getPosition(), WHITE);
+    _draw.drawRectangleLines({15, 40}, _player->getObjectComp()->getTexture().width, _player->getObjectComp()->getTexture().height, LIME);
+    _draw.drawRectangleLines({15 + (int)_player->getObjectComp()->getRect().x, 40 + (int)_player->getObjectComp()->getRect().y}, (int)_player->getObjectComp()->getRect().width, (int)_player->getObjectComp()->getRect().height, RED);
+    _draw.drawTextureRec(_player->getObjectComp()->getTexture(), _player->getObjectComp()->getRect(), _player->getPositionComp()->getPosition(), WHITE);
+    _draw.drawTexture(_player->getObjectComp()->getTexture(), {15, 40}, WHITE);
+
+    endMode2d();
+    _draw.endDrawing();
 }
 
 void Core::setFps(int fps)
@@ -195,18 +308,10 @@ ScreenSize Core::getScreenSize()
     return _screenSize;
 }
 
-// Draw Core::getDraw()
-// {
-//     return _draw;
-// }
-
-Input Core::getInput()
-{
-    return _input;
-}
-
 bool Core::windowShouldClose()
 {
+    if (WindowShouldClose())
+        _gameState = CLOSE;
     return WindowShouldClose();
 }
 
@@ -220,19 +325,6 @@ void Core::unloadTexture(Texture2D texture)
     UnloadTexture(texture);
 }
 
-// void Core::setInputs(int keyUp, int keyRight, int keyDown, int keyLeft)
-// {
-//     _keyUp = keyUp;
-//     _keyRight = keyRight;
-//     _keyDown = keyDown;
-//     _keyLeft = keyLeft;
-// }
-
-// Vector4 Core::getInputs()
-// {
-//     return {(float)_keyUp, (float)_keyRight, (float)_keyDown, (float)_keyLeft};
-// }
-
 void Core::deleteProjectiles(std::vector<Projectiles *> &projectiles)
 {
     for (std::size_t i = 0; i < projectiles.size(); i++)
@@ -243,11 +335,6 @@ void Core::deleteProjectiles(std::vector<Projectiles *> &projectiles)
             projectiles.erase(projectiles.begin() + i);
         }
     }
-}
-
-Audio &Core::getAudio()
-{
-    return _audio;
 }
 
 void Core::closeAudioDevice()
@@ -268,4 +355,44 @@ void Core::initAudioDevice()
 void Core::beginMode2d(Camera2D &camera)
 {
     BeginMode2D(camera);
+}
+
+int Core::getMonitorHeight(int monitor)
+{
+    return GetMonitorHeight(monitor);
+}
+
+int Core::getMonitorWidth(int monitor)
+{
+    return GetMonitorWidth(monitor);
+}
+
+void Core::setWindowSize(int width, int height)
+{
+    SetWindowSize(width, height);
+}
+
+bool Core::isWindowFullscreen()
+{
+    return IsWindowFullscreen();
+}
+
+int Core::getCurrentMonitor()
+{
+    return GetCurrentMonitor();
+}
+
+void Core::initWindow(std::string name)
+{
+    InitWindow(_screenSize.screenWidth, _screenSize.screenHeight, name.c_str());
+}
+
+void Core::setConfigFlags(ConfigFlags configFlags)
+{
+    SetConfigFlags(configFlags);
+}
+
+void Core::toggleFullscreen()
+{
+    ToggleFullscreen();
 }
