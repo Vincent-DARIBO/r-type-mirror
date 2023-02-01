@@ -1,0 +1,24 @@
+name: Discord Notify
+
+on:
+  pull_request:
+    types: [opened]
+
+env:
+  DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Send Discord message
+      uses: peter-evans/action-slack@v2
+      with:
+        args: >
+          {
+            "username": "Github Actions",
+            "text": "A new pull request has been opened!\nName: ${{ pull_request.title }}\nBranches: ${{ pull_request.head.ref }} -> ${{ pull_request.base.ref }}",
+            "icon_emoji": ":octocat:",
+            "webhook_url": "${{ env.DISCORD_WEBHOOK_URL }}"
+          }
