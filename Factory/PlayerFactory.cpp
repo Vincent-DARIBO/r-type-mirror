@@ -12,9 +12,9 @@ Entity *PlayerFactory::create() const
 {
     Player *player = new Player();
     Components::Position poscomp({350, 280});
-    Components::Object objcomp("../sprites/GamePlay/ennemies/r-typesheet23.gif");
+    Components::Object objcomp("../sprites/GamePlay/spaceship/r-typesheet42.gif");
     Components::Movements movcomp(5);
-    Components::Animation animcomp(5, 8);
+    Components::Animation animcomp(5, 5);
     Components::Health healthComp(3);
     Components::Collision collisionComp;
 

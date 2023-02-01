@@ -32,7 +32,8 @@ Core::Core(ScreenSize screenSize, std::string name, int fps)
     _heartFactory = std::make_unique<HeartFactory>();
     _buttonFactory = std::make_unique<ButtonFactory>();
     _backgroundFactory = std::make_unique<BackgroundFactory>();
-    _player = reinterpret_cast<Player *>(_playerFactory->create());
+    _player = reinterpret_cast<Player *>(_playerFactory->create());    
+    _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 5, (float)_player->getObjectComp()->getTexture().height / 5});
     _gameState = MENU;
     handleState();
 }
@@ -101,17 +102,17 @@ void Core::initSpaceShipChoise()
     _player->getPositionComp()->setPosition({130, 650});
 }
 
-void Core::inputSpaceShipChoise(size_t *i, std::vector<std::string> filepath)
+void Core::inputSpaceShipChoise(int *i)
 {
-    if (_input.isKeyPressed(R_TYPE_KEY_D) && *i + 1 < filepath.size())
+    if (_input.isKeyPressed(R_TYPE_KEY_D) && *i + 1 < 5)
     {
         *i = *i + 1;
-        _player->getObjectComp()->setTexture(filepath.at(*i));
+        _player->getObjectComp()->setRefRect((Rectangle){_player->getObjectComp()->getRefRect().x, _player->getObjectComp()->getRefRect().height * *i , _player->getObjectComp()->getRefRect().width , _player->getObjectComp()->getRefRect().height});
     }
-    if (_input.isKeyPressed(R_TYPE_KEY_Q) && *i > 0)
+    if (_input.isKeyPressed(R_TYPE_KEY_Q) && *i - 1 > -1)
     {
         *i = *i - 1;
-        _player->getObjectComp()->setTexture(filepath.at(*i));
+        _player->getObjectComp()->setRefRect({_player->getObjectComp()->getRefRect().x, _player->getObjectComp()->getRefRect().height * *i , _player->getObjectComp()->getRefRect().width , _player->getObjectComp()->getRefRect().height});
     }
 
     if (_input.isInRect(_btnNext->getTextComp()->getRect()))
@@ -145,15 +146,15 @@ void Core::inputSpaceShipChoise(size_t *i, std::vector<std::string> filepath)
 void Core::spaceShipChoise()
 {
     initSpaceShipChoise();
-    std::vector<std::string> filepath{"../sprites/GamePlay/ennemies/r-typesheet23.gif", "../sprites/GamePlay/ennemies/r-typesheet24.gif"};
-    size_t i = 0;
-    _player->getObjectComp()->setTexture(filepath.at(i));
-    _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
+    std::string filepath{"../sprites/GamePlay/spaceship/r-typesheet42.gif"};
+    int i = 0;
+    _player->getObjectComp()->setTexture(filepath);
+    _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 5, (float)_player->getObjectComp()->getTexture().height / 5});
 
     while (_gameState == SPACESHIP_CHOISE)
     {
         windowShouldClose();
-        inputSpaceShipChoise(&i, filepath);
+        inputSpaceShipChoise(&i);
         drawSpaceShipChoise();
     }
 }
@@ -199,7 +200,6 @@ void Core::initGame()
     _heart = reinterpret_cast<Heart *>(_heartFactory->create());
     _background = reinterpret_cast<Background *>(_backgroundFactory->create());
 
-    _player->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_player->getObjectComp()->getTexture().width / 8, (float)_player->getObjectComp()->getTexture().height / 2});
     _ennemy.at(0)->getObjectComp()->setRefRect({0.0f, 0.0f, (float)_ennemy.at(0)->getObjectComp()->getTexture().width / 8, (float)_ennemy.at(0)->getObjectComp()->getTexture().height / 2});
     _player->setKeys({R_TYPE_UP, R_TYPE_RIGHT, R_TYPE_DOWN, R_TYPE_LEFT});
 }

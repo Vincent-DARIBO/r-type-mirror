@@ -92,7 +92,7 @@ public:
     int getMonitorWidth(int monitor);
     int getMonitorHeight(int monitor);
     void toggleFullscreen();
-    void inputSpaceShipChoise(size_t *i, std::vector<std::string> filepath);
+    void inputSpaceShipChoise(int *i);
     void inputGame();
 };
 

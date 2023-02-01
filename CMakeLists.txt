@@ -33,7 +33,7 @@ endif(UNIX)
 # Insatll boost asio
 SET(Boost_USE_STATIC_LIBS ON)
 SET(Boost_USE_MULTITHREAD ON)
-find_package(Boost 1.76.0 REQUIRED COMPONENTS system thread regex asio)
+# find_package(Boost 1.76.0 REQUIRED COMPONENTS system thread regex asio)
 
 if(Boost_FOUND)
   INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
