@@ -1,35 +1,90 @@
 #include <iostream>
 #include <boost/asio.hpp>
-#include <boost/array.hpp>
-#include <chrono>
-#include <thread>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/serialization/access.hpp>
+#include <sstream>
 
-using namespace boost::asio;
+const int PORT = 8080;
 
 struct Data
 {
     int a;
     float b;
-    char c[20];
+    std::string c;
+
+    template <typename Archive>
+    void serialize(Archive &ar, const unsigned int version)
+    {
+        ar &a;
+        ar &b;
+        ar &c;
+    }
 };
+
+class Client
+{
+public:
+    Client(boost::asio::io_context &io_context) : socket_(io_context, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)) {}
+
+    void send_data(const Data &data);
+    void receive_data();
+
+private:
+    boost::asio::ip::udp::socket socket_;
+    boost::asio::ip::udp::endpoint sender_endpoint_;
+    char data_[1024];
+};
+
+void Client::send_data(const Data &data)
+{
+    std::ostringstream oss;
+    boost::archive::binary_oarchive oa(oss);
+    oa << data;
+
+    socket_.send_to(boost::asio::buffer(oss.str()), boost::asio::ip::udp::endpoint(boost::asio::ip::address_v4::loopback(), PORT));
+}
+
+void Client::receive_data()
+{
+    socket_.async_receive_from(boost::asio::buffer(data_, 1024), sender_endpoint_, [this](const boost::system::error_code &ec, std::size_t length)
+    {
+        if (!ec && length > 0)
+        {
+            Data received_data;
+            std::istringstream iss(std::string(data_, length));
+            boost::archive::binary_iarchive ia(iss);
+            ia >> received_data;
+            std::cout << "Received data: " << received_data.a << " " << received_data.b << " " << received_data.c << std::endl;
+        }
+        else
+        {
+            std::cerr << "Error: " << ec.message() << std::endl;
+        }
+    });
+}
 
 int main()
 {
-    io_service service;
-    ip::udp::endpoint endpoint(ip::udp::v4(), 0);
-    ip::udp::socket socket(service, endpoint);
-    ip::udp::endpoint server_endpoint(ip::address::from_string("127.0.0.1"), 8080);
+    try
+    {
+        boost::asio::io_context io_context;
+        Client client(io_context);
 
-    while (true) {
         Data data;
-        data.a = 1;
+        data.a = 10;
         data.b = 3.14f;
-        std::strcpy(data.c, "Salut!");
-        boost::array<char, sizeof(Data)> send_buf;
-        std::memcpy(send_buf.data(), &data, sizeof(Data));
-        socket.send_to(buffer(send_buf), server_endpoint);
-        std::cout << "Sent data: " << data.a << ", " << data.b << ", " << data.c << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        data.c = "Hello from client";
+        client.send_data(data);
+
+        Data received_data;
+        client.receive_data();
+        std::cout << "Received Data From Server: " << received_data.a << " " << received_data.b << " " << received_data.c << std::endl;
+        io_context.run();
+    }
+    catch (std::exception &e)
+    {
+        std::cerr << "Exception: " << e.what() << std::endl;
     }
     return 0;
 }

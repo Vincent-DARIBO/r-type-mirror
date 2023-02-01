@@ -3,16 +3,9 @@
 #include <memory>
 #include <boost/asio.hpp>
 
-using namespace std;
 using namespace boost::asio;
 using boost::asio::ip::udp;
 
-struct Data
-{
-    int a;
-    float b;
-    char c[20];
-};
 
 const int PORT = 8080;
 
@@ -44,7 +37,7 @@ void Server::do_receive()
                 if (std::find(clients.begin(), clients.end(), sender_endpoint_) == clients.end())
                 {
                     clients.push_back(sender_endpoint_);
-                    std::cout << "New client connected: " << sender_endpoint_ << '\n';
+                    std::cout << "New client connected: " << sender_endpoint_ << std::endl;
                 }
                 if (!ec && length > 0)
                 {
@@ -74,9 +67,9 @@ int main()
         Server server(io_context);
         io_context.run();
     }
-    catch (exception &e)
+    catch (std::exception &e)
     {
-        cerr << "Exception: " << e.what() << endl;
+        std::cerr << "Exception: " << e.what() << std::endl;
     }
     return 0;
 }
